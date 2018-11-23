@@ -42,13 +42,15 @@ public class GroupsActivity extends AppCompatActivity {
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent createGroupIntent = new Intent(GroupsActivity.this, AddNewGroupActivity.class);
+                Intent createGroupIntent = new Intent(
+                        GroupsActivity.this, AddNewGroupActivity.class);
                 startActivity(createGroupIntent);
                 finish();
             }
         });
 
-        new ParseGroupHelper(GroupsActivity.this).getAllGroupsFromParseDb(new OnReturnedGroupsListener() {
+        new ParseGroupHelper(GroupsActivity.this)
+                .getAllGroupsFromParseDb(new OnReturnedGroupsListener() {
             @Override
             public void onResponse(List<Group> groupsList) {
                 if (groupsList.isEmpty()){

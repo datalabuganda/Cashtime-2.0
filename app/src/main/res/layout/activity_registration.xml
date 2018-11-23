@@ -38,8 +38,8 @@
                 android:layout_below="@+id/username"
                 android:layout_marginTop="13dp"
                 android:ems="10"
-                android:hint="Phone Number"
-                android:maxLength="12"
+                android:hint="Phone Number eg 0704800000"
+                android:maxLength="10"
                 android:inputType="phone"
                 android:textColor="#ffffff"
                 android:textColorHint="#999999" />
