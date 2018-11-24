@@ -14,8 +14,17 @@ public class GroupMember extends ParseObject {
             memberNationality, memberLocation, memberGroupLocalUniqueId,
             localUniqueID;
     private long memberPoints;
+    private boolean isLeader;
 
     public GroupMember() {
+    }
+
+    public boolean isLeader() {
+        return isLeader;
+    }
+
+    public void setIsLeader(boolean leader) {
+        isLeader = leader;
     }
 
     public String getMemberGroupLocalUniqueId() {

@@ -21,26 +21,6 @@ import java.util.List;
 
 public class ParseGroupHelper {
 
-    public interface SaveGroupListener{
-        void onResponse(String saveMessage);
-        void onFailure(String error);
-    }
-
-    public interface UpdateGroupListener{
-        void onResponse(String updateMessage);
-        void onFailure(String error);
-    }
-
-    public interface DeleteGroupListener{
-        void onResponse(String updateMessage);
-        void onFailure(String error);
-    }
-
-    public interface UpdateGroupMemberListener{
-        void onResponse(String updateMessage);
-        void onFailure(String error);
-    }
-
     private String currentUserId;
     private static final String TAG = "ParseGroupHelper";
     private Context mContext;
@@ -52,7 +32,7 @@ public class ParseGroupHelper {
 
     public void saveNewGroupToParseDb(Group groupToSave) {
         Group newGroup = new Group();
-        newGroup.put("localUniqueID", new CashTimeUtils().getUUID());
+        newGroup.put("localUniqueID", groupToSave.getLocalUniqueID());
         newGroup.put("groupName", groupToSave.getGroupName());
         newGroup.put("groupLocation", groupToSave.getLocationOfGroup());
         newGroup.put("groupCentreName", groupToSave.getGroupCentreName());
@@ -225,6 +205,7 @@ public class ParseGroupHelper {
         newGroupMember.put("memberGroupLocalUniqueId", groupMemberToSave.getMemberGroupLocalUniqueId());
         newGroupMember.put("memberCreatorId", currentUserId);
         newGroupMember.put("groupName", groupMemberToSave.getGroupName());
+        newGroupMember.put("isLeader", groupMemberToSave.isLeader());
         newGroupMember.pinInBackground();
         newGroupMember.saveEventually();
     }
@@ -255,6 +236,7 @@ public class ParseGroupHelper {
                         groupMember.setMemberPoints(Long.parseLong(String.valueOf(returnedGroupMember.get("memberPoints"))));
                         groupMember.setMemberGroupLocalUniqueId(returnedGroupMember.get("memberGroupLocalUniqueId").toString());
                         groupMember.setGroupName(returnedGroupMember.get("groupName").toString());
+                        groupMember.setIsLeader(returnedGroupMember.getBoolean("isLeader"));
 
                         groupMemberList.add(groupMember);
                     }
@@ -338,6 +320,7 @@ public class ParseGroupHelper {
             }
         });
     }
+
 
     public void updateGroupMemberInParseDb(final GroupMember groupMemberToUpdate){
         ParseQuery<GroupMember> groupMemberParseQuery = ParseQuery.getQuery("ct2_GroupMembers");

@@ -54,6 +54,8 @@ public class ParseRegistrationHelper {
 
     }
 
+//    public void getUser
+
     public void updateIsLeaderFlagInParseDb(final User userToUpdate){
         ParseQuery<ParseUser> parseUserParseQuery = ParseUser.getQuery();
         parseUserParseQuery.fromLocalDatastore();
