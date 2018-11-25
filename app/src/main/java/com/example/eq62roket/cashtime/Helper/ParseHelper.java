@@ -57,16 +57,18 @@ public class ParseHelper {
         newGroupGoal.put("groupLocalUniqueID", groupGoals.getGroupLocalUniqueID());
         newGroupGoal.put("groupName", groupGoals.getGroupName());
         newGroupGoal.put("completedDate", groupGoals.getCompletedDate());
+        newGroupGoal.put("groupStatus", groupGoals.getGroupStatus());
         newGroupGoal.pinInBackground();
         newGroupGoal.saveEventually();
 
     }
 
-    public void getGroupGoalsFromParseDb(final OnReturnedGroupGoalsListener onReturnedGroupGoalsListener){
+    public void getActiveGroupGoalsFromParseDb(final OnReturnedGroupGoalsListener onReturnedGroupGoalsListener){
         final List<GroupGoals> groupGoalList = new ArrayList<>();
         ParseQuery<GroupGoals> groupGoalsQuery = ParseQuery.getQuery("ct2_GroupGoals");
         groupGoalsQuery.fromLocalDatastore();
         groupGoalsQuery.whereEqualTo("userId", currentUserId);
+        groupGoalsQuery.whereEqualTo("groupStatus", "active");
         groupGoalsQuery.addDescendingOrder("updatedAt");
         groupGoalsQuery.findInBackground(new FindCallback<GroupGoals>() {
             @Override
@@ -82,6 +84,7 @@ public class ParseHelper {
                         newGroupGoal.setGroupLocalUniqueID(retrievedGroupGoal.get("groupLocalUniqueID").toString());
                         newGroupGoal.setGroupName(retrievedGroupGoal.get("groupName").toString());
                         newGroupGoal.setLocalUniqueID(retrievedGroupGoal.get("localUniqueID").toString());
+                        newGroupGoal.setGroupStatus(retrievedGroupGoal.getString("groupStatus"));
 
                         groupGoalList.add(newGroupGoal);
                     }
@@ -117,6 +120,7 @@ public class ParseHelper {
                         newGroupGoal.setGroupLocalUniqueID(retrievedGroupGoal.get("groupLocalUniqueID").toString());
                         newGroupGoal.setGroupName(retrievedGroupGoal.get("groupName").toString());
                         newGroupGoal.setLocalUniqueID(retrievedGroupGoal.get("localUniqueID").toString());
+                        newGroupGoal.setGroupStatus(retrievedGroupGoal.getString("groupStatus"));
 
                         groupGoalList.add(newGroupGoal);
                     }
@@ -152,6 +156,7 @@ public class ParseHelper {
                         newGroupGoal.setGroupLocalUniqueID(retrievedGroupGoal.get("groupLocalUniqueID").toString());
                         newGroupGoal.setGroupName(retrievedGroupGoal.get("groupName").toString());
                         newGroupGoal.setLocalUniqueID(retrievedGroupGoal.get("localUniqueID").toString());
+                        newGroupGoal.setGroupStatus(retrievedGroupGoal.getString("groupStatus"));
 
                         groupGoalList.add(newGroupGoal);
                     }
@@ -212,6 +217,27 @@ public class ParseHelper {
         });
     }
 
+    public void updateGroupGoalGroupStatusInParseDb(final GroupGoals groupGoalToUpdate){
+        ParseQuery<GroupGoals> groupGoalQuery = ParseQuery.getQuery("ct2_GroupGoals");
+        groupGoalQuery.fromLocalDatastore();
+        groupGoalQuery.whereEqualTo("groupLocalUniqueID", groupGoalToUpdate.getGroupLocalUniqueID());
+        groupGoalQuery.findInBackground(new FindCallback<GroupGoals>() {
+            @Override
+            public void done(List<GroupGoals> groupGoalList, ParseException e) {
+                if (e == null) {
+                    for (GroupGoals groupGoal : groupGoalList){
+                        groupGoal.put("groupStatus", groupGoalToUpdate.getGroupStatus());
+                        groupGoal.pinInBackground();
+                        groupGoal.saveEventually();
+                    }
+
+                }else {
+                    Log.d(TAG, "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
     public void deleteGroupGoalFromParseDb(GroupGoals groupGoalToDelete){
         ParseQuery<GroupGoals> groupGoalQuery = ParseQuery.getQuery("ct2_GroupGoals");
         groupGoalQuery.fromLocalDatastore();
@@ -243,16 +269,19 @@ public class ParseHelper {
         newMemberGoal.put("memberLocalUniqueID", membersGoal.getMemberLocalUniqueID());
         newMemberGoal.put("completeDate", membersGoal.getCompleteDate());
         newMemberGoal.put("savingCreatorId", currentUserId);
+        newMemberGoal.put("groupStatus", membersGoal.getGroupStatus());
+        newMemberGoal.put("memberGroupLocalUniqueId", membersGoal.getMemberGroupLocalUniqueId());
         newMemberGoal.pinInBackground();
         newMemberGoal.saveEventually();
 
     }
 
-    public void getAllMemberGoalsFromParseDb(final OnReturnedMemberGoalListener onReturnedMemberGoalListener){
+    public void getActiveMemberGoalsFromParseDb(final OnReturnedMemberGoalListener onReturnedMemberGoalListener){
         final List<MembersGoals> membersGoalsList = new ArrayList<>();
         ParseQuery<MembersGoals> membersGoalsParseQuery = ParseQuery.getQuery("ct2_MemberGoals");
         membersGoalsParseQuery.fromLocalDatastore();
         membersGoalsParseQuery.whereEqualTo("savingCreatorId", currentUserId);
+        membersGoalsParseQuery.whereEqualTo("groupStatus", "active");
         membersGoalsParseQuery.addDescendingOrder("updatedAt");
         membersGoalsParseQuery.findInBackground(new FindCallback<MembersGoals>() {
             @Override
@@ -269,6 +298,8 @@ public class ParseHelper {
                         memberGoal.setMemberLocalUniqueID(retrievedMemberGoal.get("memberLocalUniqueID").toString());
                         memberGoal.setCompleteDate(retrievedMemberGoal.get("completeDate").toString());
                         memberGoal.setLocalUniqueID(retrievedMemberGoal.get("localUniqueID").toString());
+                        memberGoal.setGroupStatus(retrievedMemberGoal.getString("groupStatus"));
+                        memberGoal.setMemberGroupLocalUniqueId(retrievedMemberGoal.getString("memberGroupLocalUniqueId"));
 
                         membersGoalsList.add(memberGoal);
                     }
@@ -304,6 +335,8 @@ public class ParseHelper {
                         memberGoal.setMemberLocalUniqueID(retrievedMemberGoal.get("memberLocalUniqueID").toString());
                         memberGoal.setCompleteDate(retrievedMemberGoal.get("completeDate").toString());
                         memberGoal.setLocalUniqueID(retrievedMemberGoal.get("localUniqueID").toString());
+                        memberGoal.setGroupStatus(retrievedMemberGoal.getString("groupStatus"));
+                        memberGoal.setMemberGroupLocalUniqueId(retrievedMemberGoal.getString("memberGroupLocalUniqueId"));
 
                         membersGoalsList.add(memberGoal);
                     }
@@ -362,6 +395,26 @@ public class ParseHelper {
         });
     }
 
+    public void updateMemberGoalGroupStatusInParseDb(final MembersGoals memberGoalToUpdate){
+        ParseQuery<MembersGoals> memberGoalQuery = ParseQuery.getQuery("ct2_MemberGoals");
+        memberGoalQuery.fromLocalDatastore();
+        memberGoalQuery.whereEqualTo("memberGroupLocalUniqueId", memberGoalToUpdate.getMemberGroupLocalUniqueId());
+        memberGoalQuery.findInBackground(new FindCallback<MembersGoals>() {
+            @Override
+            public void done(List<MembersGoals> memberGoalList, ParseException e) {
+                if (e == null) {
+                    for (MembersGoals memberGoal : memberGoalList){
+                        memberGoal.put("groupStatus", memberGoalToUpdate.getGroupStatus());
+                        memberGoal.pinInBackground();
+                        memberGoal.saveEventually();
+                    }
+
+                }else {
+                    Log.d(TAG, "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
     public void deleteMemberGoalFromParseDb(MembersGoals membersGoalToDelete){
         ParseQuery<MembersGoals> membersGoalsParseQuery = ParseQuery.getQuery("ct2_MemberGoals");
         membersGoalsParseQuery.fromLocalDatastore();

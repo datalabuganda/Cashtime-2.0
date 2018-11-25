@@ -8,10 +8,27 @@ import com.parse.ParseObject;
  */
 @ParseClassName("ct2_MemberGoals")
 public class MembersGoals extends ParseObject {
-    String localUniqueID, memberName,memberLocalUniqueID, memberGoalName, completeDate,
-            memberGoalAmount, memberGoalDueDate, memberGoalStatus, memberGoalNotes;
+    private String localUniqueID, memberName,memberLocalUniqueID, memberGoalName, completeDate,
+            memberGoalAmount, memberGoalDueDate, memberGoalStatus, memberGoalNotes, groupStatus,
+            memberGroupLocalUniqueId;
 
     public MembersGoals() {
+    }
+
+    public String getMemberGroupLocalUniqueId() {
+        return memberGroupLocalUniqueId;
+    }
+
+    public void setMemberGroupLocalUniqueId(String memberGroupLocalUniqueId) {
+        this.memberGroupLocalUniqueId = memberGroupLocalUniqueId;
+    }
+
+    public String getGroupStatus() {
+        return groupStatus;
+    }
+
+    public void setGroupStatus(String groupStatus) {
+        this.groupStatus = groupStatus;
     }
 
     public String getCompleteDate() {

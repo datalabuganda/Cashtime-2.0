@@ -11,7 +11,10 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.eq62roket.cashtime.Helper.ParseGroupHelper;
+import com.example.eq62roket.cashtime.Helper.ParseHelper;
 import com.example.eq62roket.cashtime.Models.Group;
+import com.example.eq62roket.cashtime.Models.GroupGoals;
+import com.example.eq62roket.cashtime.Models.MembersGoals;
 import com.example.eq62roket.cashtime.R;
 
 public class EditGroupActivity extends AppCompatActivity {
@@ -24,6 +27,7 @@ public class EditGroupActivity extends AppCompatActivity {
     private String groupCentreName;
     private String nameOfGroup;
     private ParseGroupHelper mParseGroupHelper;
+    private ParseHelper mParseHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +35,7 @@ public class EditGroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_group);
 
         mParseGroupHelper = new ParseGroupHelper(EditGroupActivity.this);
+        mParseHelper = new ParseHelper(EditGroupActivity.this);
 
         Intent groupIntent = getIntent();
         groupLocalUniqueID = groupIntent.getStringExtra("groupLocalUniqueID");
@@ -90,6 +95,9 @@ public class EditGroupActivity extends AppCompatActivity {
                         mParseGroupHelper.deleteAllGroupMembersFromParseDb(groupLocalUniqueID);
                         mParseGroupHelper.deleteGroupFromParseDb(groupToDelete);
 
+                        updateGroupGoalGroupStatus(groupLocalUniqueID);
+                        updateMemberGoalGroupStatus(groupLocalUniqueID);
+
                         startGroupsActivity();
                         Toast.makeText(EditGroupActivity.this, "Group deleted successfully", Toast.LENGTH_SHORT).show();
 
@@ -117,5 +125,21 @@ public class EditGroupActivity extends AppCompatActivity {
         Intent homeActivityIntent = new Intent(EditGroupActivity.this, GroupsActivity.class);
         startActivity(homeActivityIntent);
         finish();
+    }
+
+    public void updateMemberGoalGroupStatus(String groupLocalUniqueID){
+        MembersGoals membersGoals = new MembersGoals();
+        membersGoals.setGroupStatus("deleted");
+        membersGoals.setMemberGroupLocalUniqueId(groupLocalUniqueID);
+
+        mParseHelper.updateMemberGoalGroupStatusInParseDb(membersGoals);
+    }
+
+    public void updateGroupGoalGroupStatus(String groupLocalUniqueID){
+        GroupGoals groupGoal = new GroupGoals();
+        groupGoal.setGroupLocalUniqueID(groupLocalUniqueID);
+        groupGoal.setGroupStatus("deleted");
+
+        mParseHelper.updateGroupGoalGroupStatusInParseDb(groupGoal);
     }
 }
