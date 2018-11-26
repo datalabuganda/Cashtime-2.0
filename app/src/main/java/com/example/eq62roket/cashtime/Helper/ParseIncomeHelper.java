@@ -4,7 +4,6 @@ import android.content.Context;
 import android.util.Log;
 
 import com.example.eq62roket.cashtime.Models.GroupIncome;
-
 import com.example.eq62roket.cashtime.Models.MembersIncome;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -72,6 +71,8 @@ public class ParseIncomeHelper {
         newGroupMemberIncome.put("memberUsername", groupMemberIncome.getMemberUserName());
         newGroupMemberIncome.put("memberLocalUniqueID", groupMemberIncome.getMemberLocalUniqueID());
         newGroupMemberIncome.put("createdById", groupMemberIncome.getUserId());
+        newGroupMemberIncome.put("memberGroupLocalUniqueId", groupMemberIncome.getMemberGroupLocalUniqueId());
+        newGroupMemberIncome.put("groupStatus", groupMemberIncome.getGroupStatus());
         newGroupMemberIncome.pinInBackground();
         newGroupMemberIncome.saveEventually();
 
@@ -82,6 +83,7 @@ public class ParseIncomeHelper {
         groupMemberIncomeQuery.fromLocalDatastore();
         groupMemberIncomeQuery.addDescendingOrder("updatedAt");
         groupMemberIncomeQuery.whereEqualTo("createdById", currentUserId);
+        groupMemberIncomeQuery.whereEqualTo("groupStatus", "active");
         groupMemberIncomeQuery.findInBackground(new FindCallback<MembersIncome>() {
             @Override
             public void done(List<MembersIncome> parseGroupMemberIncome, ParseException e) {
@@ -95,6 +97,7 @@ public class ParseIncomeHelper {
                         newGroupMemberIncome.setMemberUserName(retrievedGroupMemberIncome.get("memberUsername").toString());
                         newGroupMemberIncome.setUserId(retrievedGroupMemberIncome.get("createdById").toString());
                         newGroupMemberIncome.setLocalUniqueID(retrievedGroupMemberIncome.get("memberIncomeLocalUniqueID").toString());
+                        newGroupMemberIncome.setMemberGroupLocalUniqueId(retrievedGroupMemberIncome.getString("memberGroupLocalUniqueId"));
 
                         groupMemberIncomeList.add(newGroupMemberIncome);
                     }
@@ -152,6 +155,27 @@ public class ParseIncomeHelper {
         });
     }
 
+    public void updateGroupMemberIncomeGroupStatusInParseDb(final MembersIncome groupMemberIncomeToUpdate){
+        ParseQuery<MembersIncome> groupMemberIncomeQuery = ParseQuery.getQuery("ct2_MemberIncome");
+        groupMemberIncomeQuery.fromLocalDatastore();
+        groupMemberIncomeQuery.whereEqualTo("memberGroupLocalUniqueId", groupMemberIncomeToUpdate.getMemberGroupLocalUniqueId());
+        groupMemberIncomeQuery.findInBackground(new FindCallback<MembersIncome>() {
+            @Override
+            public void done(List<MembersIncome> groupMemberIncomeList, ParseException e) {
+                if (e == null) {
+                    for (MembersIncome membersIncome : groupMemberIncomeList){
+                        membersIncome.put("groupStatus", groupMemberIncomeToUpdate.getGroupStatus());
+                        membersIncome.pinInBackground();
+                        membersIncome.saveEventually();
+                    }
+                }else {
+                    Log.d(TAG, "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+
     /******************************** Group Income **********************************/
 
     public void saveGroupIncomeToParseDb(GroupIncome groupIncome){
@@ -164,6 +188,7 @@ public class ParseIncomeHelper {
         newGroupIncome.put("groupName", groupIncome.getGroupName());
         newGroupIncome.put("groupLocalUniqueID", groupIncome.getGroupLocalUniqueID());
         newGroupIncome.put("createdById", groupIncome.getUserId());
+        newGroupIncome.put("groupStatus", groupIncome.getGroupStatus());
         newGroupIncome.pinInBackground();
         newGroupIncome.saveEventually();
 
@@ -199,6 +224,7 @@ public class ParseIncomeHelper {
         groupIncomeQuery.fromLocalDatastore();
         groupIncomeQuery.addDescendingOrder("updatedAt");
         groupIncomeQuery.whereEqualTo("createdById", currentUserId);
+        groupIncomeQuery.whereEqualTo("groupStatus", "active");
         groupIncomeQuery.findInBackground(new FindCallback<GroupIncome>() {
             @Override
             public void done(List<GroupIncome> parseGroupIncome, ParseException e) {
@@ -211,6 +237,8 @@ public class ParseIncomeHelper {
                         newGroupIncome.setPeriod(retrievedGroupIncome.get("groupIncomePeriod").toString());
                         newGroupIncome.setGroupName(retrievedGroupIncome.get("groupName").toString());
                         newGroupIncome.setLocalUniqueID(retrievedGroupIncome.get("groupIncomeLocalUniqueID").toString());
+                        newGroupIncome.setGroupStatus(retrievedGroupIncome.getString("groupStatus"));
+                        newGroupIncome.setGroupLocalUniqueID(retrievedGroupIncome.getString("groupLocalUniqueID"));
 
                         groupIncomeList.add(newGroupIncome);
                     }
@@ -265,6 +293,26 @@ public class ParseIncomeHelper {
                     }
                 }else {
                     Log.d(TAG, "Error Occurred: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void updateGroupIncomeGroupStatusInParseDb(final GroupIncome groupIncomeToUpdate){
+        final ParseQuery<GroupIncome> groupIncomeQuery = ParseQuery.getQuery("ct2_GroupIncome");
+        groupIncomeQuery.fromLocalDatastore();
+        groupIncomeQuery.whereEqualTo("groupLocalUniqueID", groupIncomeToUpdate.getGroupLocalUniqueID());
+        groupIncomeQuery.findInBackground(new FindCallback<GroupIncome>() {
+            @Override
+            public void done(List<GroupIncome> groupIncomeList, ParseException e) {
+                if (e == null) {
+                    for (GroupIncome groupIncome : groupIncomeList){
+                        groupIncome.put("groupStatus", groupIncomeToUpdate.getGroupStatus());
+                        groupIncome.pinInBackground();
+                        groupIncome.saveEventually();
+                    }
+                }else {
+                    Log.d(TAG, "Error: " + e.getMessage());
                 }
             }
         });

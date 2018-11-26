@@ -12,12 +12,15 @@ import android.widget.Toast;
 
 import com.example.eq62roket.cashtime.Helper.ParseGroupHelper;
 import com.example.eq62roket.cashtime.Helper.ParseHelper;
+import com.example.eq62roket.cashtime.Helper.ParseIncomeHelper;
 import com.example.eq62roket.cashtime.Models.Group;
 import com.example.eq62roket.cashtime.Models.GroupGoals;
+import com.example.eq62roket.cashtime.Models.GroupIncome;
 import com.example.eq62roket.cashtime.Models.GroupMember;
 import com.example.eq62roket.cashtime.Models.GroupSavings;
 import com.example.eq62roket.cashtime.Models.MemberSavings;
 import com.example.eq62roket.cashtime.Models.MembersGoals;
+import com.example.eq62roket.cashtime.Models.MembersIncome;
 import com.example.eq62roket.cashtime.R;
 
 public class EditGroupActivity extends AppCompatActivity {
@@ -31,6 +34,7 @@ public class EditGroupActivity extends AppCompatActivity {
     private String nameOfGroup;
     private ParseGroupHelper mParseGroupHelper;
     private ParseHelper mParseHelper;
+    private ParseIncomeHelper mParseIncomeHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +43,7 @@ public class EditGroupActivity extends AppCompatActivity {
 
         mParseGroupHelper = new ParseGroupHelper(EditGroupActivity.this);
         mParseHelper = new ParseHelper(EditGroupActivity.this);
+        mParseIncomeHelper = new ParseIncomeHelper(EditGroupActivity.this);
 
         Intent groupIntent = getIntent();
         groupLocalUniqueID = groupIntent.getStringExtra("groupLocalUniqueID");
@@ -103,6 +108,8 @@ public class EditGroupActivity extends AppCompatActivity {
                         updateGroupMemberGroupStatus(groupLocalUniqueID);
                         updateGroupSavingsGroupStatus(groupLocalUniqueID);
                         updateMemberSavingsGroupStatus(groupLocalUniqueID);
+                        updateGroupIncomeGroupStatus(groupLocalUniqueID);
+                        updateMemberIncomeGroupStatus(groupLocalUniqueID);
 
                         startGroupsActivity();
                         Toast.makeText(EditGroupActivity.this, "Group deleted successfully", Toast.LENGTH_SHORT).show();
@@ -171,5 +178,21 @@ public class EditGroupActivity extends AppCompatActivity {
         memberSaving.setGroupLocalUniqueID(groupLocalUniqueID);
 
         mParseHelper.updateMemberSavingGroupStatusInParseDb(memberSaving);
+    }
+
+    public void updateGroupIncomeGroupStatus(String groupLocalUniqueID) {
+        GroupIncome groupIncome = new GroupIncome();
+        groupIncome.setGroupStatus("deleted");
+        groupIncome.setGroupLocalUniqueID(groupLocalUniqueID);
+
+        mParseIncomeHelper.updateGroupIncomeGroupStatusInParseDb(groupIncome);
+    }
+
+    public void updateMemberIncomeGroupStatus(String groupLocalUniqueID) {
+        MembersIncome membersIncome = new MembersIncome();
+        membersIncome.setGroupStatus("deleted");
+        membersIncome.setMemberGroupLocalUniqueId(groupLocalUniqueID);
+
+        mParseIncomeHelper.updateGroupMemberIncomeGroupStatusInParseDb(membersIncome);
     }
 }
