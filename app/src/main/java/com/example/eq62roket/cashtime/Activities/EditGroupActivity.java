@@ -14,6 +14,7 @@ import com.example.eq62roket.cashtime.Helper.ParseGroupHelper;
 import com.example.eq62roket.cashtime.Helper.ParseHelper;
 import com.example.eq62roket.cashtime.Models.Group;
 import com.example.eq62roket.cashtime.Models.GroupGoals;
+import com.example.eq62roket.cashtime.Models.GroupMember;
 import com.example.eq62roket.cashtime.Models.MembersGoals;
 import com.example.eq62roket.cashtime.R;
 
@@ -97,6 +98,7 @@ public class EditGroupActivity extends AppCompatActivity {
 
                         updateGroupGoalGroupStatus(groupLocalUniqueID);
                         updateMemberGoalGroupStatus(groupLocalUniqueID);
+                        updateGroupMemberGroupStatus(groupLocalUniqueID);
 
                         startGroupsActivity();
                         Toast.makeText(EditGroupActivity.this, "Group deleted successfully", Toast.LENGTH_SHORT).show();
@@ -141,5 +143,13 @@ public class EditGroupActivity extends AppCompatActivity {
         groupGoal.setGroupStatus("deleted");
 
         mParseHelper.updateGroupGoalGroupStatusInParseDb(groupGoal);
+    }
+
+    public void updateGroupMemberGroupStatus(String groupLocalUniqueID) {
+        GroupMember groupMember = new GroupMember();
+        groupMember.setGroupStatus("deleted");
+        groupMember.setMemberGroupLocalUniqueId(groupLocalUniqueID);
+
+        mParseGroupHelper.updateGroupMemberGroupStatusInParseDb(groupMember);
     }
 }

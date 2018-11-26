@@ -206,6 +206,7 @@ public class ParseGroupHelper {
         newGroupMember.put("memberCreatorId", currentUserId);
         newGroupMember.put("groupName", groupMemberToSave.getGroupName());
         newGroupMember.put("isLeader", groupMemberToSave.isLeader());
+        newGroupMember.put("groupStatus", groupMemberToSave.getGroupStatus());
         newGroupMember.pinInBackground();
         newGroupMember.saveEventually();
     }
@@ -215,6 +216,7 @@ public class ParseGroupHelper {
         ParseQuery<GroupMember> groupMemberParseQuery = ParseQuery.getQuery("ct2_GroupMembers");
         groupMemberParseQuery.fromLocalDatastore();
         groupMemberParseQuery.whereEqualTo("memberCreatorId", currentUserId);
+        groupMemberParseQuery.whereEqualTo("groupStatus", "active");
         groupMemberParseQuery.whereEqualTo("memberGroupLocalUniqueId", memberGroupLocalUniqueId);
         groupMemberParseQuery.addDescendingOrder("updatedAt");
 
@@ -237,6 +239,7 @@ public class ParseGroupHelper {
                         groupMember.setMemberGroupLocalUniqueId(returnedGroupMember.get("memberGroupLocalUniqueId").toString());
                         groupMember.setGroupName(returnedGroupMember.get("groupName").toString());
                         groupMember.setIsLeader(returnedGroupMember.getBoolean("isLeader"));
+                        groupMember.setGroupStatus(returnedGroupMember.getString("groupStatus"));
 
                         groupMemberList.add(groupMember);
                     }
@@ -253,6 +256,7 @@ public class ParseGroupHelper {
         ParseQuery<GroupMember> groupMemberParseQuery = ParseQuery.getQuery("ct2_GroupMembers");
         groupMemberParseQuery.fromLocalDatastore();
         groupMemberParseQuery.whereEqualTo("memberCreatorId", currentUserId);
+        groupMemberParseQuery.whereEqualTo("groupStatus", "active");
         groupMemberParseQuery.addDescendingOrder("updatedAt");
 
         groupMemberParseQuery.findInBackground(new FindCallback<GroupMember>() {
@@ -273,6 +277,7 @@ public class ParseGroupHelper {
                         groupMember.setMemberPoints(Long.parseLong(String.valueOf(returnedGroupMember.get("memberPoints"))));
                         groupMember.setMemberGroupLocalUniqueId(returnedGroupMember.get("memberGroupLocalUniqueId").toString());
                         groupMember.setGroupName(returnedGroupMember.get("groupName").toString());
+                        groupMember.setGroupStatus(returnedGroupMember.getString("groupStatus"));
 
                         groupMemberList.add(groupMember);
                     }
@@ -289,6 +294,7 @@ public class ParseGroupHelper {
         ParseQuery<GroupMember> groupMemberParseQuery = ParseQuery.getQuery("ct2_GroupMembers");
         groupMemberParseQuery.fromLocalDatastore();
         groupMemberParseQuery.whereEqualTo("groupMemberLocalUniqueID", groupMemberLocalUniqueID);
+        groupMemberParseQuery.whereEqualTo("groupStatus", "active");
         groupMemberParseQuery.addDescendingOrder("updatedAt");
 
         groupMemberParseQuery.findInBackground(new FindCallback<GroupMember>() {
@@ -309,6 +315,7 @@ public class ParseGroupHelper {
                         groupMember.setMemberPoints(Long.parseLong(String.valueOf(returnedGroupMember.get("memberPoints"))));
                         groupMember.setMemberGroupLocalUniqueId(returnedGroupMember.get("memberGroupLocalUniqueId").toString());
                         groupMember.setGroupName(returnedGroupMember.get("groupName").toString());
+                        groupMember.setGroupStatus(returnedGroupMember.getString("groupStatus"));
 
                         groupMemberList.add(groupMember);
                     }
@@ -341,6 +348,28 @@ public class ParseGroupHelper {
                         groupMembers.get(0).put("memberLocation", groupMemberToUpdate.getMemberLocation());
                         groupMembers.get(0).pinInBackground();
                         groupMembers.get(0).saveEventually();
+                    }
+                }else {
+                    Log.d(TAG, "Error Occurred: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void updateGroupMemberGroupStatusInParseDb(final GroupMember groupMemberToUpdate){
+        ParseQuery<GroupMember> groupMemberParseQuery = ParseQuery.getQuery("ct2_GroupMembers");
+        groupMemberParseQuery.fromLocalDatastore();
+        groupMemberParseQuery.whereEqualTo("memberGroupLocalUniqueId", groupMemberToUpdate.getMemberGroupLocalUniqueId());
+        groupMemberParseQuery.findInBackground(new FindCallback<GroupMember>() {
+            @Override
+            public void done(List<GroupMember> groupMemberList, ParseException e) {
+                if (e == null) {
+                    for (GroupMember groupMember : groupMemberList){
+                        if (!groupMember.isLeader()) {
+                            groupMember.put("groupStatus", groupMemberToUpdate.getGroupStatus());
+                            groupMember.pinInBackground();
+                            groupMember.saveEventually();
+                        }
                     }
                 }else {
                     Log.d(TAG, "Error Occurred: " + e.getMessage());

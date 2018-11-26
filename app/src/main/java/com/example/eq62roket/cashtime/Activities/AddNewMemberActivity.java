@@ -92,6 +92,7 @@ public class AddNewMemberActivity extends AppCompatActivity {
                     newGroupMember.setGroupName(groupName);
                     newGroupMember.setMemberPoints(3);
                     newGroupMember.setIsLeader(false);
+                    newGroupMember.setGroupStatus("active");
                     mParseGroupHelper.saveGroupMemberUserToParseDb(newGroupMember);
 
                     Group groupToUpdate = new Group();

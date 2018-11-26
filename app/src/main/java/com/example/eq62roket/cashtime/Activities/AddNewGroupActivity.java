@@ -125,6 +125,7 @@ public class AddNewGroupActivity extends AppCompatActivity {
         newGroupMember.setGroupName(groupName.getText().toString().trim());
         newGroupMember.setIsLeader(groupLeader.getBoolean("isLeader"));
         newGroupMember.setMemberPoints(groupLeader.getInt("userPoints"));
+        newGroupMember.setGroupStatus("active");
         mParseGroupHelper.saveGroupMemberUserToParseDb(newGroupMember);
     }
 }
