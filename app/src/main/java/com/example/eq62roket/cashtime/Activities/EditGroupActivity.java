@@ -15,6 +15,8 @@ import com.example.eq62roket.cashtime.Helper.ParseHelper;
 import com.example.eq62roket.cashtime.Models.Group;
 import com.example.eq62roket.cashtime.Models.GroupGoals;
 import com.example.eq62roket.cashtime.Models.GroupMember;
+import com.example.eq62roket.cashtime.Models.GroupSavings;
+import com.example.eq62roket.cashtime.Models.MemberSavings;
 import com.example.eq62roket.cashtime.Models.MembersGoals;
 import com.example.eq62roket.cashtime.R;
 
@@ -99,6 +101,8 @@ public class EditGroupActivity extends AppCompatActivity {
                         updateGroupGoalGroupStatus(groupLocalUniqueID);
                         updateMemberGoalGroupStatus(groupLocalUniqueID);
                         updateGroupMemberGroupStatus(groupLocalUniqueID);
+                        updateGroupSavingsGroupStatus(groupLocalUniqueID);
+                        updateMemberSavingsGroupStatus(groupLocalUniqueID);
 
                         startGroupsActivity();
                         Toast.makeText(EditGroupActivity.this, "Group deleted successfully", Toast.LENGTH_SHORT).show();
@@ -151,5 +155,21 @@ public class EditGroupActivity extends AppCompatActivity {
         groupMember.setMemberGroupLocalUniqueId(groupLocalUniqueID);
 
         mParseGroupHelper.updateGroupMemberGroupStatusInParseDb(groupMember);
+    }
+
+    public void updateGroupSavingsGroupStatus(String groupLocalUniqueID) {
+        GroupSavings groupSaving = new GroupSavings();
+        groupSaving.setGroupStatus("deleted");
+        groupSaving.setGroupLocalUniqueID(groupLocalUniqueID);
+
+        mParseHelper.updateGroupSavingGroupStatusInParseDb(groupSaving);
+    }
+
+    public void updateMemberSavingsGroupStatus(String groupLocalUniqueID) {
+        MemberSavings memberSaving = new MemberSavings();
+        memberSaving.setGroupStatus("deleted");
+        memberSaving.setGroupLocalUniqueID(groupLocalUniqueID);
+
+        mParseHelper.updateMemberSavingGroupStatusInParseDb(memberSaving);
     }
 }

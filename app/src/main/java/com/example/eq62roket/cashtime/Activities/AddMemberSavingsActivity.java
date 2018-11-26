@@ -37,7 +37,7 @@ public class AddMemberSavingsActivity extends AppCompatActivity {
     private String selectedPeriod;
     private String selectedIncomeSource;
     private String nameOfMember;
-    private String memberLocalUniqueID;
+    private String memberLocalUniqueID, memberGroupLocalUniqueId;
     private String memberGoalLocalUniqueID, memberGoalAmount, memberGoalDueDate;
     private ParseHelper mParseHelper;
 
@@ -64,6 +64,7 @@ public class AddMemberSavingsActivity extends AppCompatActivity {
         memberGoalLocalUniqueID = intent.getStringExtra("memberGoalLocalUniqueID");
         memberGoalAmount = intent.getStringExtra("memberGoalAmount");
         memberGoalDueDate = intent.getStringExtra("memberGoalDueDate");
+        memberGroupLocalUniqueId = intent.getStringExtra("memberGroupLocalUniqueId");
 
 
         goalName.setText(nameOfGoal);
@@ -232,6 +233,8 @@ public class AddMemberSavingsActivity extends AppCompatActivity {
                         newMemberSaving.setDateAdded(dateToday);
                         newMemberSaving.setMemberGoalLocalUniqueID(memberGoalLocalUniqueID);
                         newMemberSaving.setMemberLocalUniqueID(memberLocalUniqueID);
+                        newMemberSaving.setGroupStatus("active");
+                        newMemberSaving.setGroupLocalUniqueID(memberGroupLocalUniqueId);
                         if (note.trim().equals("")){
                             newMemberSaving.setSavingNote("No Notes");
                         }else {
