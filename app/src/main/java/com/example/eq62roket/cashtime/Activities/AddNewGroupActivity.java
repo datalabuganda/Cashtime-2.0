@@ -3,7 +3,6 @@ package com.example.eq62roket.cashtime.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,6 +12,7 @@ import com.example.eq62roket.cashtime.Helper.CashTimeUtils;
 import com.example.eq62roket.cashtime.Helper.ParseGroupHelper;
 import com.example.eq62roket.cashtime.Helper.ParseRegistrationHelper;
 import com.example.eq62roket.cashtime.Helper.PeriodHelper;
+import com.example.eq62roket.cashtime.Interfaces.OnSuccessfulGroupLeaderStatusUpdate;
 import com.example.eq62roket.cashtime.Models.Group;
 import com.example.eq62roket.cashtime.Models.GroupMember;
 import com.example.eq62roket.cashtime.Models.User;
@@ -74,14 +74,22 @@ public class AddNewGroupActivity extends AppCompatActivity {
                     groupLeader.setParseId(currentUserId);
                     groupLeader.setIsLeader(true);
                     new ParseRegistrationHelper(AddNewGroupActivity.this)
-                            .updateIsLeaderFlagInParseDb(groupLeader);
+                            .updateIsLeaderFlagInParseDb(groupLeader, new OnSuccessfulGroupLeaderStatusUpdate() {
+                                @Override
+                                public void onResponse(String success) {
+                                    addGroupLeaderToGroup();
 
-                    addGroupLeaderToGroup();
+                                    Intent groupIntent = new Intent(AddNewGroupActivity.this, GroupsActivity.class);
+                                    startActivity(groupIntent);
+                                    finish();
+                                    Toast.makeText(AddNewGroupActivity.this, "Your group has been created", Toast.LENGTH_SHORT).show();
+                                }
 
-                    Intent groupIntent = new Intent(AddNewGroupActivity.this, GroupsActivity.class);
-                    startActivity(groupIntent);
-                    finish();
-                    Toast.makeText(AddNewGroupActivity.this, "Your group has been created", Toast.LENGTH_SHORT).show();
+                                @Override
+                                public void onFailure(String error) {
+                                    Toast.makeText(AddNewGroupActivity.this, "Failed to create group", Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
                 }else {
                     Toast.makeText(AddNewGroupActivity.this, "All Fields Are Required", Toast.LENGTH_SHORT).show();
@@ -105,7 +113,6 @@ public class AddNewGroupActivity extends AppCompatActivity {
         GroupMember newGroupMember = new GroupMember();
         ParseUser groupLeader = ParseUser.getCurrentUser();
 
-        Log.d(TAG, "groupLeader: " + groupLeader.getInt("isLeader"));
         newGroupMember.setMemberUsername(groupLeader.getUsername());
         newGroupMember.setMemberPhoneNumber(groupLeader.getString("userPhone"));
         newGroupMember.setMemberHousehold(groupLeader.getString("userHousehold"));
