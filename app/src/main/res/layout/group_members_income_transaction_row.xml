@@ -42,7 +42,6 @@
                         android:textStyle="bold"/>
 
                     <TextView
-<<<<<<< HEAD
                         android:layout_marginTop="5dp"
                         android:id="@+id/groupMemberIncomePeriod"
                         android:layout_width="wrap_content"
@@ -51,15 +50,6 @@
                         android:text="12/3/2018"
                         android:textColor="@color/red"
                         android:textSize="12sp" />
-=======
-                        android:id="@+id/groupMemberIncomePeriod"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="12/3/2018"
-                        android:textSize="12sp"
-                        android:textColor="#6a6a6a" />
-
->>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
 
                 </LinearLayout>
 
@@ -70,12 +60,8 @@
                     android:layout_marginTop="5dp">
                     <TextView
                         android:id="@+id/groupMemberIncomeSource"
-<<<<<<< HEAD
-                        android:layout_width="195dp"
                         android:layout_marginTop="5dp"
-=======
                         android:layout_width="210dp"
->>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
                         android:layout_height="wrap_content"
                         android:text="Category"
                         android:textSize="12sp"
@@ -90,7 +76,6 @@
                     android:layout_marginTop="5dp">
 
                     <TextView
-<<<<<<< HEAD
                         android:id="@+id/groupMemberIncomeAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -106,44 +91,19 @@
                         android:layout_marginLeft="2dp"
                         android:text="UGX"
                         android:textColor="@color/red"
-                        android:textSize="14sp" />
-=======
-                        android:layout_marginLeft="2dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="UGX: "
-                        android:textSize="14sp"
-                        android:textColor="@color/red" />
-
-                    <TextView
-                        android:id="@+id/groupMemberIncomeAmount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1000,000"
-                        android:textStyle="bold"
-                        android:textSize="14sp"
-                        android:textColor="@color/red" />
-
->>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
+                        android:textSize="14sp"/>
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-<<<<<<< HEAD
                     android:orientation="vertical">
-=======
-                    android:orientation="horizontal"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp">
->>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
 
                     <TextView
                         android:id="@+id/groupMemberIncomeNotes"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-<<<<<<< HEAD
                         android:layout_marginTop="5dp"
                         android:ellipsize="end"
                         android:text="Notes"
@@ -164,10 +124,6 @@
                         android:layout_gravity="right"
                         android:src="@drawable/expand" />
 
-=======
-                        android:text="This is the notes section"
-                        android:textSize="16sp" />
->>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
                 </LinearLayout>
 
             </LinearLayout>

@@ -113,4 +113,6 @@ public class GroupMembersIncomeAdapter extends RecyclerView.Adapter<GroupMembers
         mGroupMemberIncomes.addAll(groupMemberIncomes);
         notifyDataSetChanged();
     }
+
+
 }

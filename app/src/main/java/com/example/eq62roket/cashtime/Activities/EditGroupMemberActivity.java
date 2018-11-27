@@ -104,16 +104,12 @@ public class EditGroupMemberActivity extends AppCompatActivity {
             }
         });
 
-
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 updateMemberUserInfo();
             }
         });
-
-
-
     }
 
     public void prepopulateUIWithUserInfo(){
@@ -172,6 +168,9 @@ public class EditGroupMemberActivity extends AppCompatActivity {
             Toast.makeText(EditGroupMemberActivity.this, "All Fields are required", Toast.LENGTH_SHORT).show();
         }
 
+        nationalityCategory();
+        genderCategory();
+        levelOfEducationCategory();
     }
 
     public void startGroupMembersActivity(){

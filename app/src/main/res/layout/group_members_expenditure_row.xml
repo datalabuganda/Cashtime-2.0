@@ -43,7 +43,6 @@
                         android:textStyle="bold"/>
 
                     <TextView
-<<<<<<< HEAD
                         android:layout_marginTop="5dp"
                         android:id="@+id/groupMembersExpenditureDate"
                         android:layout_width="wrap_content"
@@ -52,14 +51,6 @@
                         android:text="12/3/2018"
                         android:textColor="@color/red"
                         android:textSize="12sp" />
-=======
-                        android:id="@+id/groupMembersExpenditureDate"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Weekly"
-                        android:textSize="12sp"
-                        android:textColor="#6a6a6a" />
->>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
 
                 </LinearLayout>
 
@@ -84,7 +75,6 @@
                     android:orientation="horizontal">
 
                     <TextView
-<<<<<<< HEAD
                         android:id="@+id/groupMembersExpenditureAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -101,23 +91,6 @@
                         android:text="UGX"
                         android:textColor="@color/red"
                         android:textSize="14sp" />
-=======
-                        android:layout_marginLeft="2dp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="UGX: "
-                        android:textSize="14sp"
-                        android:textColor="@color/red" />
-
-                    <TextView
-                        android:id="@+id/groupMembersExpenditureAmount"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="1,000,000"
-                        android:textStyle="bold"
-                        android:textSize="14sp"
-                        android:textColor="@color/red" />
->>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
 
                 </LinearLayout>
 
@@ -127,12 +100,8 @@
                     android:orientation="vertical">
 
                     <TextView
-<<<<<<< HEAD
                         android:id="@+id/groupMembersExpenditureNotes"
-=======
                         android:textStyle="bold"
-                        android:text="This is the notes section"
->>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"

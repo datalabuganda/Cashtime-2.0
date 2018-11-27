@@ -177,14 +177,8 @@ public class HomeActivity extends AppCompatActivity
                     HomeActivity.this, CalendarActivity.class);
             startActivity(calendarIntent);
 
-<<<<<<< HEAD
         } else if (id == R.id.settings) {
             Intent settingsIntent = new Intent(HomeActivity.this, SettingsActivity.class);
-=======
-        }         if (id == R.id.settings) {
-            Intent settingsIntent = new Intent(
-                    HomeActivity.this, SettingsActivity.class);
->>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
             startActivity(settingsIntent);
         } else if (id == R.id.help){
             Intent helpIntent = new Intent(HomeActivity.this, HelpActivity.class);
@@ -193,13 +187,8 @@ public class HomeActivity extends AppCompatActivity
         }else if (id == R.id.logout) {
             // TODO: 4/23/18 check for internet connection before logging out user 
             ParseUser.logOut();
-<<<<<<< HEAD
             Toast.makeText(getApplicationContext(), "Your have been logged out", Toast.LENGTH_SHORT).show();
             Intent loginIntent = new Intent(HomeActivity.this, LoginActivity.class);
-=======
-            Intent loginIntent = new Intent(
-                    HomeActivity.this, LoginActivity.class);
->>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
             startActivity(loginIntent);
             finish();
 
