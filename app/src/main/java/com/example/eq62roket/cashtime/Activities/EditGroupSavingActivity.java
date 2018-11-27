@@ -99,7 +99,6 @@ public class EditGroupSavingActivity extends AppCompatActivity {
                 builder.setMessage(
                         "Deleting saving for '" + nameOfGoal + "' Can not be undone." + "Are You Sure You want to delete this saving?").setTitle("Delete Saving");
 
-
                 AlertDialog dialog = builder.create();
                 dialog.show();
 

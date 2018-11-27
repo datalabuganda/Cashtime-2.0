@@ -232,6 +232,7 @@ public class AddGroupSavingsActivity extends AppCompatActivity {
                             newGroupSaving.setDateAdded(dateToday);
                             newGroupSaving.setGroupLocalUniqueID(groupLocalUniqueID);
                             newGroupSaving.setGroupGoalLocalUniqueID(groupGoalLocalUniqueID);
+                            newGroupSaving.setGroupStatus("active");
                             if (note.trim().equals("")){
                                 newGroupSaving.setNotes("No notes");
                             }else {

@@ -43,6 +43,7 @@
                         android:textStyle="bold"/>
 
                     <TextView
+<<<<<<< HEAD
                         android:layout_marginTop="5dp"
                         android:id="@+id/groupExpenditureDate"
                         android:layout_width="wrap_content"
@@ -51,6 +52,14 @@
                         android:text="12/3/2018"
                         android:textColor="@color/red"
                         android:textSize="12sp" />
+=======
+                        android:id="@+id/groupExpenditureDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="12/3/2018"
+                        android:textSize="12sp"
+                        android:textColor="#6a6a6a" />
+>>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
 
                 </LinearLayout>
 
@@ -67,7 +76,15 @@
                         android:textSize="12sp"
                         android:textColor="@color/black"/>
 
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
                     <TextView
+<<<<<<< HEAD
                         android:id="@+id/groupExpenditureAmount"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -85,6 +102,23 @@
                         android:textColor="@color/red"
                         android:textSize="14sp" />
 
+=======
+                        android:layout_marginLeft="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="UGX: "
+                        android:textSize="14sp"
+                        android:textColor="@color/red" />
+
+                    <TextView
+                        android:id="@+id/groupExpenditureAmount"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1000,000"
+                        android:textStyle="bold"
+                        android:textSize="14sp"
+                        android:textColor="@color/red" />
+>>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
                 </LinearLayout>
 
                 <LinearLayout
@@ -95,6 +129,7 @@
                     <TextView
                         android:id="@+id/groupExpenditureNotes"
                         android:layout_width="match_parent"
+                        android:text="This is the notes section"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="5dp"
                         android:ellipsize="end"

@@ -112,9 +112,7 @@ public class EditGroupMemberActivity extends AppCompatActivity {
             }
         });
 
-        nationalityCategory();
-        genderCategory();
-        levelOfEducationCategory();
+
 
     }
 

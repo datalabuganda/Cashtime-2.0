@@ -22,19 +22,24 @@ import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 public class RegistrationActivity extends AppCompatActivity {
 
     private static final String TAG = "RegistrationActivity";
+<<<<<<< HEAD
     EditText username, userPhone, userHousehold, userBusiness, userGender, userEducationLevel,
             userNationality, userLocation, userPassword, userPasswordConfirm;
+=======
+    EditText username, userPhone, userHousehold, userBusiness, userGender,
+            userEducationLevel, userNationality, userLocation, userPassword;
+>>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
     CardView userRegister;
 
     private ProgressDialogHelper mProgressDialogHelper;
 
-    public static String[] nationalityCategories = {"Ugandan", "Kenyan", "Rwandan", "Congolese", "Tanzanian",
-            "South Sudanese"};
+    public static String[] nationalityCategories = {"Ugandan", "Kenyan", "Rwandan",
+            "Congolese", "Tanzanian", "South Sudanese"};
 
     public static String[] genderCategories = {"Male", "Female"};
 
-    public static String[] levelOfEducationCategories = {"Primary", "O Level", "A Level", "University",
-            "Institution"};
+    public static String[] levelOfEducationCategories = {"Primary", "O Level", "A Level",
+            "University", "Institution"};
 
     private CheckBox checkBox;
 
@@ -46,6 +51,10 @@ public class RegistrationActivity extends AppCompatActivity {
         mProgressDialogHelper = new ProgressDialogHelper(RegistrationActivity.this);
         mProgressDialogHelper.setProgreDialogTitle("Registration in Progress ...");
         mProgressDialogHelper.setProgressDialogMessage("Please Wait While We Register You");
+
+        genderCategory();
+        nationalityCategory();
+        levelOfEducationCategory();
 
         username = (EditText)findViewById(R.id.username);
         userPhone = (EditText)findViewById(R.id.userPhoneNumber);
@@ -72,11 +81,55 @@ public class RegistrationActivity extends AppCompatActivity {
         checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+<<<<<<< HEAD
                 if (((CheckBox) view).isChecked() == true ) {
                     checkBox.setTextColor(Color.WHITE);
+=======
+                if (!username.getText().toString().equals("") &&
+                        !userPhone.getText().toString().equals("") &&
+                        !userHousehold.getText().toString().equals("") &&
+                        !userBusiness.getText().toString().equals("") &&
+                        !userGender.getText().toString().equals("") &&
+                        !userEducationLevel.getText().toString().equals("") &&
+                        !userNationality.getText().toString().equals("") &&
+                        !userLocation.getText().toString().equals("") &&
+                        !userPassword.getText().toString().equals("")){
+
+                    mProgressDialogHelper.showProgressDialog();
+
+                    User newUser = new User();
+                    newUser.setUserName(username.getText().toString());
+                    newUser.setPhoneNumber(userPhone.getText().toString());
+                    newUser.setHousehold(userHousehold.getText().toString());
+                    newUser.setBusiness(userBusiness.getText().toString());
+                    newUser.setGender(userGender.getText().toString());
+                    newUser.setEducationLevel(userEducationLevel.getText().toString());
+                    newUser.setNationality(userNationality.getText().toString());
+                    newUser.setLocation(userLocation.getText().toString());
+                    newUser.setPassword(userPassword.getText().toString());
+                    newUser.setIsLeader(false);
+                    newUser.setPoints(3);
+
+                    new ParseRegistrationHelper(RegistrationActivity.this)
+                            .saveRegisteredUserToParseDb(newUser, new OnSuccessfulRegistrationListener() {
+                        @Override
+                        public void onResponse(String success) {
+                            mProgressDialogHelper.dismissProgressDialog();
+                            Intent homeIntent = new Intent(
+                                    RegistrationActivity.this, LoginActivity.class);
+                            startActivity(homeIntent);
+                            finish();
+                            Toast.makeText(
+                                    RegistrationActivity.this,
+                                    "You have registered",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                        }
+>>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
 
                     userRegister.setOnClickListener(new View.OnClickListener() {
                         @Override
+<<<<<<< HEAD
                         public void onClick(View view) {
 
                             if (!username.getText().toString().equals("") &&
@@ -130,21 +183,34 @@ public class RegistrationActivity extends AppCompatActivity {
                             }else {
                                 Toast.makeText(RegistrationActivity.this, "All Fields Must Be Filled", Toast.LENGTH_SHORT).show();
                             }
+=======
+                        public void onFailure(String error) {
+                            mProgressDialogHelper.dismissProgressDialog();
+                            Toast.makeText(
+                                    RegistrationActivity.this,
+                                    "Registration Failed " + error,
+                                    Toast.LENGTH_LONG
+                            ).show();
+>>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
                         }
                     });
 
 //                    Toast.makeText(RegistrationActivity.this,
 //                            "Checked :)", Toast.LENGTH_LONG).show();
                 }else {
+<<<<<<< HEAD
                     checkBox.setTextColor(Color.RED);
                     checkBox.setText("Please check the Terms of Service and Privacy Policys");
+=======
+                    Toast.makeText(
+                            RegistrationActivity.this,
+                            "All Fields Must Be Filled",
+                            Toast.LENGTH_SHORT
+                    ).show();
+>>>>>>> 36cd8ee0c97e041d53f991321af84d0ee1ef5a55
                 }
             }
         });
-
-        genderCategory();
-        nationalityCategory();
-        levelOfEducationCategory();
 
     }
 
@@ -155,7 +221,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 nationalityCategories
         );
 
-        MaterialBetterSpinner materialNationalitySpinner = (MaterialBetterSpinner) findViewById(R.id.userNationality);
+        MaterialBetterSpinner materialNationalitySpinner = (MaterialBetterSpinner)
+                findViewById(R.id.userNationality);
         materialNationalitySpinner.setAdapter(nationalityAdapter);
     }
 
@@ -166,7 +233,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 genderCategories
         );
 
-        MaterialBetterSpinner materialGenderSpinner = (MaterialBetterSpinner) findViewById(R.id.userGender);
+        MaterialBetterSpinner materialGenderSpinner = (MaterialBetterSpinner)
+                findViewById(R.id.userGender);
         materialGenderSpinner.setAdapter(genderAdapter);
     }
 
@@ -177,7 +245,8 @@ public class RegistrationActivity extends AppCompatActivity {
                 levelOfEducationCategories
         );
 
-        MaterialBetterSpinner materialLevelOfEducationSpinner = (MaterialBetterSpinner) findViewById(R.id.userEducationLevel);
+        MaterialBetterSpinner materialLevelOfEducationSpinner = (MaterialBetterSpinner)
+                findViewById(R.id.userEducationLevel);
         materialLevelOfEducationSpinner.setAdapter(levelOfEducationAdapter);
     }
 

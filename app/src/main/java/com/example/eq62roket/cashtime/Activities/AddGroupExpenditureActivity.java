@@ -37,7 +37,6 @@ public class AddGroupExpenditureActivity extends AppCompatActivity {
         setContentView(R.layout.activity_add_group_expenditure);
         mGroupExpenditureCategory = (EditText) findViewById(R.id.groupExpenditureCategory);
         mGroupExpenditureAmount = (EditText)findViewById(R.id.groupExpenditureAmount);
-//        mGroupExpenditureDate = (EditText)findViewById(R.id.groupExpenditureDate);
         mGroupExpenditureNotes = (EditText)findViewById(R.id.groupExpenditureNotes);
         mGroupName = (TextView) findViewById(R.id.groupName);
         groupExpenditureSaveBtn = (Button)findViewById(R.id.groupExpenditureSaveBtn);
@@ -94,6 +93,7 @@ public class AddGroupExpenditureActivity extends AppCompatActivity {
             groupExpenditures.setGroupLocalUniqueID(groupLocalUniqueID);
             groupExpenditures.setGroupName(groupName);
             groupExpenditures.setUserId(currentUserId);
+            groupExpenditures.setGroupStatus("active");
 
             new ParseExpenditureHelper(this).saveGroupExpenditureToParseDb(groupExpenditures);
             startTabbedExpenditureActivity();

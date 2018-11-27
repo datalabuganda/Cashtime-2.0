@@ -29,13 +29,14 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MyViewHo
 
 
     public class MyViewHolder extends RecyclerView.ViewHolder{
-        public TextView memberName, memberPhoneNumber, memberGroupName;
+        public TextView memberName, memberPhoneNumber, memberGroupName, isAdmin;
 
         public MyViewHolder(View view) {
             super(view);
             memberName = (TextView) view.findViewById(R.id.memberName);
             memberPhoneNumber = (TextView) view.findViewById(R.id. memberPhoneNumber);
             memberGroupName = (TextView) view.findViewById(R.id.memberGroupName);
+            isAdmin = (TextView) view.findViewById(R.id.isAdmin);
 
         }
 
@@ -43,12 +44,18 @@ public class MembersAdapter extends RecyclerView.Adapter<MembersAdapter.MyViewHo
             memberName.setText(groupMemberUser.getMemberUsername());
             memberPhoneNumber.setText(groupMemberUser.getMemberPhoneNumber());
             memberGroupName.setText(groupMemberUser.getGroupName());
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    onGroupMemberClickListener.onGroupMemberClick(groupMemberUser);
-                }
-            });
+
+
+            if (!groupMemberUser.isLeader()) {
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        onGroupMemberClickListener.onGroupMemberClick(groupMemberUser);
+                    }
+                });
+            } else {
+                isAdmin.setVisibility(View.VISIBLE);
+            }
         }
 
     }

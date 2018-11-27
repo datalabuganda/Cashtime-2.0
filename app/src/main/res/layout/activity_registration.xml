@@ -35,6 +35,7 @@
                         android:textColor="#ffffff"
                         android:inputType="textPersonName" />
 
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -201,7 +202,6 @@
                     android:layout_alignLeft="@+id/userLocation"
                     android:layout_alignStart="@+id/userLocation"
                     android:layout_below="@+id/userLocation"
-                    android:layout_marginTop="12dp"
                     android:ems="10"
                     android:hint="Confirm Password"
                     android:textColor="#ffffff"

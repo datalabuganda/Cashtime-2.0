@@ -10,11 +10,19 @@ import com.parse.ParseObject;
 @ParseClassName("ct2_GroupGoals")
 public class GroupGoals extends ParseObject {
     private String name, dueDate, amount, completedDate,
-            notes, groupGoalStatus, groupLocalUniqueID, groupName, localUniqueID;
-
+            notes, groupGoalStatus, groupLocalUniqueID, groupName,
+            localUniqueID, groupStatus;
 
     public GroupGoals() {
         super();
+    }
+
+    public String getGroupStatus() {
+        return groupStatus;
+    }
+
+    public void setGroupStatus(String groupStatus) {
+        this.groupStatus = groupStatus;
     }
 
     public String getLocalUniqueID() {

@@ -127,6 +127,7 @@ public class AddGroupGoalsActivity extends AppCompatActivity {
                 groupGoals.setDueDate(goalDeadline);
                 groupGoals.setGroupLocalUniqueID(groupLocalUniqueID);
                 groupGoals.setGroupName(groupName);
+                groupGoals.setGroupStatus("active");
                 if (goalNotes.trim().equals("")){
                     groupGoals.setNotes("No notes");
                 }else {
