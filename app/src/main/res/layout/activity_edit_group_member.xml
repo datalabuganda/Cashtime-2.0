@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -11,9 +11,10 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <LinearLayout
-            android:layout_marginLeft="40dp"
-            android:layout_width="match_parent"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
@@ -74,49 +75,57 @@
                 android:textColor="#ffffff"
                 android:textColorHint="#999999" />
 
-
-            <EditText
+            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
                 android:id="@+id/groupMembersGender"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/userBusiness"
-                android:layout_alignStart="@+id/userBusiness"
-                android:layout_below="@+id/userBusiness"
-                android:layout_marginTop="14dp"
+                android:layout_alignLeft="@+id/userGender"
+                android:layout_alignStart="@+id/userGender"
+                android:layout_below="@+id/userGender"
                 android:ems="10"
                 android:hint="Gender"
                 android:inputType="textPersonName"
                 android:textColor="#ffffff"
-                android:textColorHint="#999999" />
+                app:met_floatingLabel="normal"
+                app:met_baseColor="#ffffff"
+                app:met_textColorHint="#999999"
+                app:met_underlineColor="#191919"
+                app:met_primaryColor="@color/colorAccent" />
 
-
-            <EditText
+            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
                 android:id="@+id/groupMembersEducationLevel"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_alignLeft="@+id/userGender"
                 android:layout_alignStart="@+id/userGender"
                 android:layout_below="@+id/userGender"
-                android:layout_marginTop="12dp"
                 android:ems="10"
                 android:hint="Education Level"
                 android:inputType="textPersonName"
                 android:textColor="#ffffff"
-                android:textColorHint="#999999" />
+                app:met_floatingLabel="normal"
+                app:met_baseColor="#ffffff"
+                app:met_textColorHint="#999999"
+                app:met_underlineColor="#191919"
+                app:met_primaryColor="@color/colorAccent" />
 
-            <EditText
+            <com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner
                 android:id="@+id/groupMembersNationality"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/userEducationLevel"
-                android:layout_alignStart="@+id/userEducationLevel"
-                android:layout_below="@+id/userEducationLevel"
-                android:layout_marginTop="12dp"
+                android:layout_alignLeft="@+id/userGender"
+                android:layout_alignStart="@+id/userGender"
+                android:layout_below="@+id/userGender"
                 android:ems="10"
                 android:hint="Nationality"
                 android:inputType="textPersonName"
                 android:textColor="#ffffff"
-                android:textColorHint="#999999" />
+                app:met_floatingLabel="normal"
+                app:met_baseColor="#ffffff"
+                app:met_textColorHint="#999999"
+                app:met_underlineColor="#191919"
+                app:met_primaryColor="@color/colorAccent" />
+
 
             <EditText
                 android:id="@+id/groupMemberLocation"
@@ -135,33 +144,37 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
+
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="280dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="10dp"
                     android:orientation="horizontal">
 
                     <Button
                         android:id="@+id/btnDelete"
-                        android:layout_width="135dp"
+                        android:layout_width="138dp"
                         android:layout_height="60dp"
-                        android:layout_marginRight="5dp"
-                        android:text="@string/delete"
-                        android:background="@color/red"
-                        android:textColor="#fff"/>
+                        android:layout_marginRight="1dp"
+                        android:textColor="#fff"
+                        android:background="@drawable/cancel_button_background"
+                        android:text="@string/delete"/>
 
                     <Button
                         android:id="@+id/btnUpdate"
-                        android:layout_width="135dp"
-                        android:layout_marginLeft="5dp"
+                        android:layout_width="138dp"
+                        android:layout_marginLeft="1dp"
                         android:layout_height="60dp"
-                        android:background="@color/green"
+                        android:text="@string/update_btn"
                         android:textColor="#fff"
-                        android:layout_marginRight="20dp"
-                        android:text="@string/update_btn"/>
+                        android:background="@drawable/save_button_background"/>
+
                 </LinearLayout>
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
-</RelativeLayout>
+</ScrollView>
