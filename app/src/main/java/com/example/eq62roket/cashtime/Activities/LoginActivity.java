@@ -56,11 +56,13 @@ public class LoginActivity extends AppCompatActivity {
                     registeredUser.setUserName(username);
                     registeredUser.setPassword(password);
 
-                    new ParseRegistrationHelper(LoginActivity.this).loginUserToParseDb(registeredUser, new OnSuccessfulLoginListener() {
+                    new ParseRegistrationHelper(LoginActivity.this)
+                            .loginUserToParseDb(registeredUser, new OnSuccessfulLoginListener() {
                         @Override
                         public void onResponse(String success) {
                             mProgressDialogHelper.dismissProgressDialog();
-                            Intent loginIntent = new Intent(LoginActivity.this, HomeActivity.class);
+                            Intent loginIntent = new Intent(
+                                    LoginActivity.this, HomeActivity.class);
                             startActivity(loginIntent);
                             finish();
                             Toast.makeText(LoginActivity.this, "Logged In Successfully", Toast.LENGTH_SHORT).show();
@@ -70,12 +72,20 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(String error) {
                             mProgressDialogHelper.dismissProgressDialog();
-                            Toast.makeText(LoginActivity.this, "Failed to login " + error, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(
+                                    LoginActivity.this,
+                                    "Failed to login " + error,
+                                    Toast.LENGTH_SHORT
+                            ).show();
                         }
                     });
 
                 } else {
-                    Toast.makeText(LoginActivity.this, "All fields must be filled to login", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(
+                            LoginActivity.this,
+                            "All fields must be filled to login",
+                            Toast.LENGTH_SHORT
+                    ).show();
                 }
             }
         });
@@ -83,7 +93,8 @@ public class LoginActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
+                Intent intent = new Intent(
+                        LoginActivity.this, RegistrationActivity.class);
                 startActivity(intent);
 
             }

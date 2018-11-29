@@ -39,7 +39,7 @@ public class AddMembersGoalsActivity extends AppCompatActivity {
     Button memberGoalCancelBtn, memberGoalSaveBtn;
     private TextView memberName;
     private EditText memberGoalName, memberGoalAmount, memberGoalNote;
-    private String groupMemberLocalUniqueID;
+    private String groupMemberLocalUniqueID, memberGroupLocalUniqueId;
     private ParseGroupHelper mParseGroupHelper;
 
     @Override
@@ -51,6 +51,7 @@ public class AddMembersGoalsActivity extends AppCompatActivity {
 
         Intent addMemberGoalIntent = getIntent();
         groupMemberLocalUniqueID = addMemberGoalIntent.getStringExtra("groupMemberLocalUniqueID");
+        memberGroupLocalUniqueId = addMemberGoalIntent.getStringExtra("memberGroupLocalUniqueId");
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
@@ -146,6 +147,8 @@ public class AddMembersGoalsActivity extends AppCompatActivity {
                 newMembersGoal.setMemberGoalDueDate(goalDeadline);
                 newMembersGoal.setMemberName(nameOfMember);
                 newMembersGoal.setMemberLocalUniqueID(groupMemberLocalUniqueID);
+                newMembersGoal.setMemberGroupLocalUniqueId(memberGroupLocalUniqueId);
+                newMembersGoal.setGroupStatus("active");
                 if (goalNotes.isEmpty()){
                     newMembersGoal.setMemberGoalNotes("No Notes Added");
                 }else {

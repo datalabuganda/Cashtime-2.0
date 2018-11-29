@@ -3,6 +3,7 @@ package com.example.eq62roket.cashtime.Helper;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.eq62roket.cashtime.Interfaces.OnSuccessfulGroupLeaderStatusUpdate;
 import com.example.eq62roket.cashtime.Interfaces.OnSuccessfulLoginListener;
 import com.example.eq62roket.cashtime.Interfaces.OnSuccessfulRegistrationListener;
 import com.example.eq62roket.cashtime.Models.User;
@@ -54,7 +55,8 @@ public class ParseRegistrationHelper {
 
     }
 
-    public void updateIsLeaderFlagInParseDb(final User userToUpdate){
+    public void updateIsLeaderFlagInParseDb(
+            final User userToUpdate, final OnSuccessfulGroupLeaderStatusUpdate onSuccessfulGroupLeaderStatusUpdate){
         ParseQuery<ParseUser> parseUserParseQuery = ParseUser.getQuery();
         parseUserParseQuery.fromLocalDatastore();
         parseUserParseQuery.getInBackground(userToUpdate.getParseId(), new GetCallback<ParseUser>() {
@@ -64,8 +66,10 @@ public class ParseRegistrationHelper {
                     parseUser.put("isLeader", userToUpdate.getIsLeader());
                     parseUser.pinInBackground();
                     parseUser.saveEventually();
+                    onSuccessfulGroupLeaderStatusUpdate.onResponse("updated");
                 }else {
                     Log.d(TAG, "Error Occurred: " + e.getMessage());
+                    onSuccessfulGroupLeaderStatusUpdate.onFailure(e.getMessage());
                 }
             }
         });

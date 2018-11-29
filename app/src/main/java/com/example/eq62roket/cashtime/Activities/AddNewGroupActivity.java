@@ -8,23 +8,35 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.eq62roket.cashtime.Helper.CashTimeUtils;
 import com.example.eq62roket.cashtime.Helper.ParseGroupHelper;
 import com.example.eq62roket.cashtime.Helper.ParseRegistrationHelper;
 import com.example.eq62roket.cashtime.Helper.PeriodHelper;
+import com.example.eq62roket.cashtime.Interfaces.OnSuccessfulGroupLeaderStatusUpdate;
 import com.example.eq62roket.cashtime.Models.Group;
+import com.example.eq62roket.cashtime.Models.GroupMember;
 import com.example.eq62roket.cashtime.Models.User;
 import com.example.eq62roket.cashtime.R;
 import com.parse.ParseUser;
 
 public class AddNewGroupActivity extends AppCompatActivity {
     private static final String TAG = "NewGroupActivity";
+    private ParseGroupHelper mParseGroupHelper;
+
     EditText groupName, groupLocation, groupCenter;
     Button groupCancelBtn, groupSaveBtn;
+    String groupLocalUniqueId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_group);
+
+        mParseGroupHelper = new ParseGroupHelper(AddNewGroupActivity.this);
+
+        groupLocalUniqueId = new CashTimeUtils().getUUID();
+
 
         groupName = (EditText)findViewById(R.id.groupName);
         groupLocation = (EditText)findViewById(R.id.groupLocation);
@@ -55,18 +67,29 @@ public class AddNewGroupActivity extends AppCompatActivity {
                     groupTosave.setGroupCentreName(groupCentreName);
                     groupTosave.setLocationOfGroup(locationOfGroup);
                     groupTosave.setGroupMemberCount(1);
+                    groupTosave.setLocalUniqueID(groupLocalUniqueId);
                     new ParseGroupHelper(AddNewGroupActivity.this).saveNewGroupToParseDb(groupTosave);
 
                     User groupLeader = new User();
                     groupLeader.setParseId(currentUserId);
                     groupLeader.setIsLeader(true);
                     new ParseRegistrationHelper(AddNewGroupActivity.this)
-                            .updateIsLeaderFlagInParseDb(groupLeader);
+                            .updateIsLeaderFlagInParseDb(groupLeader, new OnSuccessfulGroupLeaderStatusUpdate() {
+                                @Override
+                                public void onResponse(String success) {
+                                    addGroupLeaderToGroup();
 
-                    Intent groupIntent = new Intent(AddNewGroupActivity.this, GroupsActivity.class);
-                    startActivity(groupIntent);
-                    finish();
-                    Toast.makeText(AddNewGroupActivity.this, "Your group has been created", Toast.LENGTH_SHORT).show();
+                                    Intent groupIntent = new Intent(AddNewGroupActivity.this, GroupsActivity.class);
+                                    startActivity(groupIntent);
+                                    finish();
+                                    Toast.makeText(AddNewGroupActivity.this, "Your group has been created", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onFailure(String error) {
+                                    Toast.makeText(AddNewGroupActivity.this, "Failed to create group", Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
                 }else {
                     Toast.makeText(AddNewGroupActivity.this, "All Fields Are Required", Toast.LENGTH_SHORT).show();
@@ -84,5 +107,25 @@ public class AddNewGroupActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    public void addGroupLeaderToGroup(){
+        GroupMember newGroupMember = new GroupMember();
+        ParseUser groupLeader = ParseUser.getCurrentUser();
+
+        newGroupMember.setMemberUsername(groupLeader.getUsername());
+        newGroupMember.setMemberPhoneNumber(groupLeader.getString("userPhone"));
+        newGroupMember.setMemberHousehold(groupLeader.getString("userHousehold"));
+        newGroupMember.setMemberBusiness(groupLeader.getString("userBusiness"));
+        newGroupMember.setMemberGender(groupLeader.getString("userGender"));
+        newGroupMember.setMemberEducationLevel(groupLeader.getString("userEducationLevel"));
+        newGroupMember.setMemberNationality(groupLeader.getString("userNationality"));
+        newGroupMember.setMemberLocation(groupLeader.getString("userLocation"));
+        newGroupMember.setMemberGroupLocalUniqueId(groupLocalUniqueId);
+        newGroupMember.setGroupName(groupName.getText().toString().trim());
+        newGroupMember.setIsLeader(groupLeader.getBoolean("isLeader"));
+        newGroupMember.setMemberPoints(groupLeader.getInt("userPoints"));
+        newGroupMember.setGroupStatus("active");
+        mParseGroupHelper.saveGroupMemberUserToParseDb(newGroupMember);
     }
 }

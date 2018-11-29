@@ -8,11 +8,27 @@ import com.parse.ParseObject;
  * modiified by etwin
  */
 @ParseClassName("ct2_GroupMemberSavings")
-public class MemberSavings extends ParseObject{
+public class    MemberSavings extends ParseObject{
     private String localUniqueID, memberName, goalName, period, incomeSource, dateAdded, savingNote;
-    private String savingAmount, memberLocalUniqueID, memberGoalLocalUniqueID;
+    private String savingAmount, memberLocalUniqueID, memberGoalLocalUniqueID, groupStatus, groupLocalUniqueID;
 
     public MemberSavings() {
+    }
+
+    public String getGroupLocalUniqueID() {
+        return groupLocalUniqueID;
+    }
+
+    public void setGroupLocalUniqueID(String groupLocalUniqueID) {
+        this.groupLocalUniqueID = groupLocalUniqueID;
+    }
+
+    public String getGroupStatus() {
+        return groupStatus;
+    }
+
+    public void setGroupStatus(String groupStatus) {
+        this.groupStatus = groupStatus;
     }
 
     public String getMemberGoalLocalUniqueID() {

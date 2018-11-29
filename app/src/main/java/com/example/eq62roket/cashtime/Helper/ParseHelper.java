@@ -57,16 +57,18 @@ public class ParseHelper {
         newGroupGoal.put("groupLocalUniqueID", groupGoals.getGroupLocalUniqueID());
         newGroupGoal.put("groupName", groupGoals.getGroupName());
         newGroupGoal.put("completedDate", groupGoals.getCompletedDate());
+        newGroupGoal.put("groupStatus", groupGoals.getGroupStatus());
         newGroupGoal.pinInBackground();
         newGroupGoal.saveEventually();
 
     }
 
-    public void getGroupGoalsFromParseDb(final OnReturnedGroupGoalsListener onReturnedGroupGoalsListener){
+    public void getActiveGroupGoalsFromParseDb(final OnReturnedGroupGoalsListener onReturnedGroupGoalsListener){
         final List<GroupGoals> groupGoalList = new ArrayList<>();
         ParseQuery<GroupGoals> groupGoalsQuery = ParseQuery.getQuery("ct2_GroupGoals");
         groupGoalsQuery.fromLocalDatastore();
         groupGoalsQuery.whereEqualTo("userId", currentUserId);
+        groupGoalsQuery.whereEqualTo("groupStatus", "active");
         groupGoalsQuery.addDescendingOrder("updatedAt");
         groupGoalsQuery.findInBackground(new FindCallback<GroupGoals>() {
             @Override
@@ -82,6 +84,7 @@ public class ParseHelper {
                         newGroupGoal.setGroupLocalUniqueID(retrievedGroupGoal.get("groupLocalUniqueID").toString());
                         newGroupGoal.setGroupName(retrievedGroupGoal.get("groupName").toString());
                         newGroupGoal.setLocalUniqueID(retrievedGroupGoal.get("localUniqueID").toString());
+                        newGroupGoal.setGroupStatus(retrievedGroupGoal.getString("groupStatus"));
 
                         groupGoalList.add(newGroupGoal);
                     }
@@ -117,6 +120,7 @@ public class ParseHelper {
                         newGroupGoal.setGroupLocalUniqueID(retrievedGroupGoal.get("groupLocalUniqueID").toString());
                         newGroupGoal.setGroupName(retrievedGroupGoal.get("groupName").toString());
                         newGroupGoal.setLocalUniqueID(retrievedGroupGoal.get("localUniqueID").toString());
+                        newGroupGoal.setGroupStatus(retrievedGroupGoal.getString("groupStatus"));
 
                         groupGoalList.add(newGroupGoal);
                     }
@@ -152,6 +156,7 @@ public class ParseHelper {
                         newGroupGoal.setGroupLocalUniqueID(retrievedGroupGoal.get("groupLocalUniqueID").toString());
                         newGroupGoal.setGroupName(retrievedGroupGoal.get("groupName").toString());
                         newGroupGoal.setLocalUniqueID(retrievedGroupGoal.get("localUniqueID").toString());
+                        newGroupGoal.setGroupStatus(retrievedGroupGoal.getString("groupStatus"));
 
                         groupGoalList.add(newGroupGoal);
                     }
@@ -212,6 +217,27 @@ public class ParseHelper {
         });
     }
 
+    public void updateGroupGoalGroupStatusInParseDb(final GroupGoals groupGoalToUpdate){
+        ParseQuery<GroupGoals> groupGoalQuery = ParseQuery.getQuery("ct2_GroupGoals");
+        groupGoalQuery.fromLocalDatastore();
+        groupGoalQuery.whereEqualTo("groupLocalUniqueID", groupGoalToUpdate.getGroupLocalUniqueID());
+        groupGoalQuery.findInBackground(new FindCallback<GroupGoals>() {
+            @Override
+            public void done(List<GroupGoals> groupGoalList, ParseException e) {
+                if (e == null) {
+                    for (GroupGoals groupGoal : groupGoalList){
+                        groupGoal.put("groupStatus", groupGoalToUpdate.getGroupStatus());
+                        groupGoal.pinInBackground();
+                        groupGoal.saveEventually();
+                    }
+
+                }else {
+                    Log.d(TAG, "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
     public void deleteGroupGoalFromParseDb(GroupGoals groupGoalToDelete){
         ParseQuery<GroupGoals> groupGoalQuery = ParseQuery.getQuery("ct2_GroupGoals");
         groupGoalQuery.fromLocalDatastore();
@@ -243,16 +269,19 @@ public class ParseHelper {
         newMemberGoal.put("memberLocalUniqueID", membersGoal.getMemberLocalUniqueID());
         newMemberGoal.put("completeDate", membersGoal.getCompleteDate());
         newMemberGoal.put("savingCreatorId", currentUserId);
+        newMemberGoal.put("groupStatus", membersGoal.getGroupStatus());
+        newMemberGoal.put("memberGroupLocalUniqueId", membersGoal.getMemberGroupLocalUniqueId());
         newMemberGoal.pinInBackground();
         newMemberGoal.saveEventually();
 
     }
 
-    public void getAllMemberGoalsFromParseDb(final OnReturnedMemberGoalListener onReturnedMemberGoalListener){
+    public void getActiveMemberGoalsFromParseDb(final OnReturnedMemberGoalListener onReturnedMemberGoalListener){
         final List<MembersGoals> membersGoalsList = new ArrayList<>();
         ParseQuery<MembersGoals> membersGoalsParseQuery = ParseQuery.getQuery("ct2_MemberGoals");
         membersGoalsParseQuery.fromLocalDatastore();
         membersGoalsParseQuery.whereEqualTo("savingCreatorId", currentUserId);
+        membersGoalsParseQuery.whereEqualTo("groupStatus", "active");
         membersGoalsParseQuery.addDescendingOrder("updatedAt");
         membersGoalsParseQuery.findInBackground(new FindCallback<MembersGoals>() {
             @Override
@@ -269,6 +298,8 @@ public class ParseHelper {
                         memberGoal.setMemberLocalUniqueID(retrievedMemberGoal.get("memberLocalUniqueID").toString());
                         memberGoal.setCompleteDate(retrievedMemberGoal.get("completeDate").toString());
                         memberGoal.setLocalUniqueID(retrievedMemberGoal.get("localUniqueID").toString());
+                        memberGoal.setGroupStatus(retrievedMemberGoal.getString("groupStatus"));
+                        memberGoal.setMemberGroupLocalUniqueId(retrievedMemberGoal.getString("memberGroupLocalUniqueId"));
 
                         membersGoalsList.add(memberGoal);
                     }
@@ -304,6 +335,8 @@ public class ParseHelper {
                         memberGoal.setMemberLocalUniqueID(retrievedMemberGoal.get("memberLocalUniqueID").toString());
                         memberGoal.setCompleteDate(retrievedMemberGoal.get("completeDate").toString());
                         memberGoal.setLocalUniqueID(retrievedMemberGoal.get("localUniqueID").toString());
+                        memberGoal.setGroupStatus(retrievedMemberGoal.getString("groupStatus"));
+                        memberGoal.setMemberGroupLocalUniqueId(retrievedMemberGoal.getString("memberGroupLocalUniqueId"));
 
                         membersGoalsList.add(memberGoal);
                     }
@@ -362,6 +395,26 @@ public class ParseHelper {
         });
     }
 
+    public void updateMemberGoalGroupStatusInParseDb(final MembersGoals memberGoalToUpdate){
+        ParseQuery<MembersGoals> memberGoalQuery = ParseQuery.getQuery("ct2_MemberGoals");
+        memberGoalQuery.fromLocalDatastore();
+        memberGoalQuery.whereEqualTo("memberGroupLocalUniqueId", memberGoalToUpdate.getMemberGroupLocalUniqueId());
+        memberGoalQuery.findInBackground(new FindCallback<MembersGoals>() {
+            @Override
+            public void done(List<MembersGoals> memberGoalList, ParseException e) {
+                if (e == null) {
+                    for (MembersGoals memberGoal : memberGoalList){
+                        memberGoal.put("groupStatus", memberGoalToUpdate.getGroupStatus());
+                        memberGoal.pinInBackground();
+                        memberGoal.saveEventually();
+                    }
+
+                }else {
+                    Log.d(TAG, "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
     public void deleteMemberGoalFromParseDb(MembersGoals membersGoalToDelete){
         ParseQuery<MembersGoals> membersGoalsParseQuery = ParseQuery.getQuery("ct2_MemberGoals");
         membersGoalsParseQuery.fromLocalDatastore();
@@ -394,6 +447,7 @@ public class ParseHelper {
         newGroupSaving.put("groupSavingDateAdded", groupSaving.getDateAdded());
         newGroupSaving.put("groupLocalUniqueID", groupSaving.getGroupLocalUniqueID());
         newGroupSaving.put("groupGoalLocalUniqueID", groupSaving.getGroupGoalLocalUniqueID());
+        newGroupSaving.put("groupStatus", groupSaving.getGroupStatus());
         newGroupSaving.pinInBackground();
         newGroupSaving.saveEventually();
     }
@@ -403,6 +457,7 @@ public class ParseHelper {
         ParseQuery<GroupSavings> groupSavingsParseQuery = ParseQuery.getQuery("ct2_GroupSavings");
         groupSavingsParseQuery.fromLocalDatastore();
         groupSavingsParseQuery.whereEqualTo("userId", currentUserId);
+        groupSavingsParseQuery.whereEqualTo("groupStatus", "active");
         groupSavingsParseQuery.addDescendingOrder("updatedAt");
         groupSavingsParseQuery.findInBackground(new FindCallback<GroupSavings>() {
             @Override
@@ -417,6 +472,7 @@ public class ParseHelper {
                         groupSaving.setNotes(retrievedGroupSavings.get("groupSavingNotes").toString());
                         groupSaving.setDateAdded(retrievedGroupSavings.get("groupSavingDateAdded").toString());
                         groupSaving.setLocalUniqueID(retrievedGroupSavings.get("localUniqueID").toString());
+                        groupSaving.setGroupStatus(retrievedGroupSavings.getString("groupStatus"));
 
                         groupSavingsList.add(groupSaving);
                     }
@@ -456,7 +512,7 @@ public class ParseHelper {
     public void updateGroupSavingInParseDb(final GroupSavings groupSavingToUpdate){
         ParseQuery<GroupSavings> groupSavingsParseQuery = ParseQuery.getQuery("ct2_GroupSavings");
         groupSavingsParseQuery.fromLocalDatastore();
-        groupSavingsParseQuery.whereEqualTo("localUniqueID", groupSavingToUpdate.getLocalUniqueID());
+        groupSavingsParseQuery.whereEqualTo("groupLocalUniqueID", groupSavingToUpdate.getLocalUniqueID());
         groupSavingsParseQuery.findInBackground(new FindCallback<GroupSavings>() {
             @Override
             public void done(List<GroupSavings> groupSavings, ParseException e) {
@@ -469,6 +525,26 @@ public class ParseHelper {
                         groupSavings.get(0).put("groupSavingNotes", groupSavingToUpdate.getNotes());
                         groupSavings.get(0).pinInBackground();
                         groupSavings.get(0).saveEventually();
+                    }
+                }else {
+                    Log.d(TAG, "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void updateGroupSavingGroupStatusInParseDb(final GroupSavings groupSavingToUpdate){
+        ParseQuery<GroupSavings> groupSavingsParseQuery = ParseQuery.getQuery("ct2_GroupSavings");
+        groupSavingsParseQuery.fromLocalDatastore();
+        groupSavingsParseQuery.whereEqualTo("localUniqueID", groupSavingToUpdate.getGroupLocalUniqueID());
+        groupSavingsParseQuery.findInBackground(new FindCallback<GroupSavings>() {
+            @Override
+            public void done(List<GroupSavings> groupSavingList, ParseException e) {
+                if (e == null) {
+                    for (GroupSavings groupSaving : groupSavingList){
+                        groupSaving.put("groupStatus", groupSavingToUpdate.getGroupStatus());
+                        groupSaving.pinInBackground();
+                        groupSaving.saveEventually();
                     }
                 }else {
                     Log.d(TAG, "Error: " + e.getMessage());
@@ -509,6 +585,8 @@ public class ParseHelper {
         newMemberSaving.put("memberLocalUniqueID", memberSavingToSave.getMemberLocalUniqueID());
         newMemberSaving.put("memberGoalLocalUniqueID", memberSavingToSave.getMemberGoalLocalUniqueID());
         newMemberSaving.put("savingCreatorId", currentUserId);
+        newMemberSaving.put("groupStatus", memberSavingToSave.getGroupStatus());
+        newMemberSaving.put("memberGroupLocalUniqueId", memberSavingToSave.getGroupLocalUniqueID());
         newMemberSaving.pinInBackground();
         newMemberSaving.saveEventually();
     }
@@ -518,6 +596,7 @@ public class ParseHelper {
         ParseQuery<MemberSavings> memberSavingsParseQuery = ParseQuery.getQuery("ct2_GroupMemberSavings");
         memberSavingsParseQuery.fromLocalDatastore();
         memberSavingsParseQuery.whereEqualTo("savingCreatorId", currentUserId);
+        memberSavingsParseQuery.whereEqualTo("groupStatus", "active");
         memberSavingsParseQuery.addDescendingOrder("updatedAt");
         memberSavingsParseQuery.findInBackground(new FindCallback<MemberSavings>() {
             @Override
@@ -534,6 +613,8 @@ public class ParseHelper {
                         memberSaving.setDateAdded(retrievedMemberSavings.get("memberSavingDateAdded").toString());
                         memberSaving.setMemberGoalLocalUniqueID(retrievedMemberSavings.get("memberGoalLocalUniqueID").toString());
                         memberSaving.setLocalUniqueID(retrievedMemberSavings.get("memberSavingLocalUniqueID").toString());
+                        memberSaving.setGroupStatus(retrievedMemberSavings.getString("groupStatus"));
+                        memberSaving.setGroupLocalUniqueID(retrievedMemberSavings.getString("memberGroupLocalUniqueId"));
 
                         memberSavingsList.add(memberSaving);
                     }
@@ -581,6 +662,30 @@ public class ParseHelper {
                         memberSavings.get(0).put("memberSavingIncomeSource", memberSavingToUpdate.getIncomeSource());
                         memberSavings.get(0).put("memberSavingPeriod", memberSavingToUpdate.getPeriod());
                         memberSavings.get(0).put("memberSavingNotes", memberSavingToUpdate.getSavingNote());
+                        memberSavings.get(0).pinInBackground();
+                        memberSavings.get(0).saveEventually();
+
+                    }
+
+                }else {
+                    Log.d(TAG, "Error: " + e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void updateMemberSavingGroupStatusInParseDb(final MemberSavings memberSavingToUpdate){
+        ParseQuery<MemberSavings> memberSavingsParseQuery = ParseQuery.getQuery("ct2_GroupMemberSavings");
+        memberSavingsParseQuery.fromLocalDatastore();
+        memberSavingsParseQuery.whereEqualTo("memberGroupLocalUniqueId", memberSavingToUpdate.getGroupLocalUniqueID());
+        memberSavingsParseQuery.findInBackground(new FindCallback<MemberSavings>() {
+            @Override
+            public void done(List<MemberSavings> memberSavingList, ParseException e) {
+                if (e == null) {
+                    for (MemberSavings memberSaving : memberSavingList){
+                        memberSaving.put("groupStatus", memberSavingToUpdate.getGroupStatus());
+                        memberSaving.pinInBackground();
+                        memberSaving.saveEventually();
                     }
 
                 }else {

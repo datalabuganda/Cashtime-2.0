@@ -46,11 +46,12 @@ public class GroupMembersExpenditureListActivity extends AppCompatActivity {
                     mMembersAdapter = new MembersAdapter(memberList, new MembersAdapter.OnGroupMemberClickListener() {
                         @Override
                         public void onGroupMemberClick(GroupMember groupMember) {
-                            Intent editUserIntent = new Intent(GroupMembersExpenditureListActivity.this, AddGroupMembersExpendituresActivity.class);
-                            editUserIntent.putExtra("userName", groupMember.getMemberUsername());
-                            editUserIntent.putExtra("groupMemberLocalUniqueID", groupMember.getLocalUniqueID());
+                            Intent addMemberExpenditureIntent = new Intent(GroupMembersExpenditureListActivity.this, AddGroupMembersExpendituresActivity.class);
+                            addMemberExpenditureIntent.putExtra("userName", groupMember.getMemberUsername());
+                            addMemberExpenditureIntent.putExtra("groupMemberLocalUniqueID", groupMember.getLocalUniqueID());
+                            addMemberExpenditureIntent.putExtra("memberGroupLocalUniqueId", groupMember.getMemberGroupLocalUniqueId());
 
-                            startActivity(editUserIntent);
+                            startActivity(addMemberExpenditureIntent);
                             finish();
                         }
 
