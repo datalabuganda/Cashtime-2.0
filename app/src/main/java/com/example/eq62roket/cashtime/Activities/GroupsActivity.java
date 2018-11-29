@@ -45,7 +45,6 @@ public class GroupsActivity extends AppCompatActivity {
                 Intent createGroupIntent = new Intent(
                         GroupsActivity.this, AddNewGroupActivity.class);
                 startActivity(createGroupIntent);
-                finish();
             }
         });
 
