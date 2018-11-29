@@ -50,9 +50,7 @@ public class GroupMembersExpenditureListActivity extends AppCompatActivity {
                             addMemberExpenditureIntent.putExtra("userName", groupMember.getMemberUsername());
                             addMemberExpenditureIntent.putExtra("groupMemberLocalUniqueID", groupMember.getLocalUniqueID());
                             addMemberExpenditureIntent.putExtra("memberGroupLocalUniqueId", groupMember.getMemberGroupLocalUniqueId());
-
                             startActivity(addMemberExpenditureIntent);
-                            finish();
                         }
 
                     });

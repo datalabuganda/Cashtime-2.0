@@ -49,7 +49,6 @@ public class TabbedIncomeActivity extends AppCompatActivity {
 
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_tabbed_income, menu);

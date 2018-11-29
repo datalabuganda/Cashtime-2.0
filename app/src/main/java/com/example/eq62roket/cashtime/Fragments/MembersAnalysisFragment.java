@@ -60,9 +60,7 @@ public class MembersAnalysisFragment extends Fragment implements SearchView.OnQu
                         Intent editUserIntent = new Intent(getActivity(), MemberAnalysisActivity.class);
                         editUserIntent.putExtra("userName", groupMember.getMemberUsername());
                         editUserIntent.putExtra("memberLocalUniqueID", groupMember.getLocalUniqueID());
-
                         startActivity(editUserIntent);
-                        getActivity().finish();
                     }
 
                 });
