@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -44,6 +43,10 @@ public class EditGroupMemberActivity extends AppCompatActivity {
         final String memberGroupLocalUniqueId = editGroupMemberIntent.getStringExtra("memberGroupLocalUniqueId");
         final String usernameOfGroupUser = editGroupMemberIntent.getStringExtra("groupMemberName");
         final String groupMemberCount = editGroupMemberIntent.getStringExtra("groupMemberCount");
+
+        nationalityCategory();
+        genderCategory();
+        levelOfEducationCategory();
 
         groupMemberUsername = (EditText) findViewById(R.id.groupMemberUsername);
         groupMemberBusiness = (EditText) findViewById(R.id.groupMembersBusiness);
