@@ -111,41 +111,46 @@ public class AddGroupGoalsActivity extends AppCompatActivity {
     private void saveGroupGoal(){
         if ( !groupGoalName.getText().toString().equals("") &&
                 !groupGoalAmount.getText().toString().equals("")){
-            String nameOfGoal = groupGoalName.getText().toString();
-            String costOfGoal = groupGoalAmount.getText().toString();
-            String goalDeadline = groupGoalDueDate.getText().toString();
-            String goalNotes = groupGoalNote.getText().toString();
-            String dateToday = new PeriodHelper().getDateToday();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-            try {
-                Date todayZDate = simpleDateFormat.parse(dateToday);
-                Date goalZDeadline = simpleDateFormat.parse(goalDeadline);
+            
+            if (Long.parseLong(groupGoalAmount.getText().toString()) < 1000000000) {
+                String nameOfGoal = groupGoalName.getText().toString();
+                String costOfGoal = groupGoalAmount.getText().toString();
+                String goalDeadline = groupGoalDueDate.getText().toString();
+                String goalNotes = groupGoalNote.getText().toString();
+                String dateToday = new PeriodHelper().getDateToday();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                try {
+                    Date todayZDate = simpleDateFormat.parse(dateToday);
+                    Date goalZDeadline = simpleDateFormat.parse(goalDeadline);
 
-                final GroupGoals groupGoals = new GroupGoals();
-                groupGoals.setAmount(costOfGoal);
-                groupGoals.setName(nameOfGoal);
-                groupGoals.setDueDate(goalDeadline);
-                groupGoals.setGroupLocalUniqueID(groupLocalUniqueID);
-                groupGoals.setGroupName(groupName);
-                groupGoals.setGroupStatus("active");
-                if (goalNotes.trim().equals("")){
-                    groupGoals.setNotes("No notes");
-                }else {
-                    groupGoals.setNotes(goalNotes);
-                }
-                if (todayZDate.after(goalZDeadline)){
-                    groupGoals.setGroupGoalStatus("failed");
-                    groupGoals.setCompletedDate(dateToday);
-                }else {
-                    groupGoals.setGroupGoalStatus("incomplete");
-                    groupGoals.setCompletedDate("");
-                }
-                new ParseHelper(this).saveGroupGoalsToParseDb(groupGoals);
-                startTabbedGoalsActivity();
-                Toast.makeText(context, "Group Goal " + groupGoals.getName() + " saved", Toast.LENGTH_SHORT).show();
+                    final GroupGoals groupGoals = new GroupGoals();
+                    groupGoals.setAmount(costOfGoal);
+                    groupGoals.setName(nameOfGoal);
+                    groupGoals.setDueDate(goalDeadline);
+                    groupGoals.setGroupLocalUniqueID(groupLocalUniqueID);
+                    groupGoals.setGroupName(groupName);
+                    groupGoals.setGroupStatus("active");
+                    if (goalNotes.trim().equals("")){
+                        groupGoals.setNotes("No notes");
+                    }else {
+                        groupGoals.setNotes(goalNotes);
+                    }
+                    if (todayZDate.after(goalZDeadline)){
+                        groupGoals.setGroupGoalStatus("failed");
+                        groupGoals.setCompletedDate(dateToday);
+                    }else {
+                        groupGoals.setGroupGoalStatus("incomplete");
+                        groupGoals.setCompletedDate("");
+                    }
+                    new ParseHelper(this).saveGroupGoalsToParseDb(groupGoals);
+                    startTabbedGoalsActivity();
+                    Toast.makeText(context, "Group Goal " + groupGoals.getName() + " saved", Toast.LENGTH_SHORT).show();
 
-            } catch (ParseException e) {
-                e.printStackTrace();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                groupGoalAmount.setError("Goal amount can not be greater than 1,000,000,000");
             }
         }else {
             Toast.makeText(context, "All fields are required", Toast.LENGTH_SHORT).show();

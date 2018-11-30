@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -76,7 +77,7 @@ public class RegistrationActivity extends AppCompatActivity {
                     !userPasswordConfirm.getText().toString().equals("")) {
 
                     if (userPasswordConfirm.getText().toString().equals(userPassword.getText().toString())){
-                        if (checkBox.isChecked() == true ) {
+                        if (checkBox.isChecked() ) {
                             checkBox.setTextColor(Color.WHITE);
 
                             mProgressDialogHelper.showProgressDialog();
@@ -107,6 +108,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 @Override
                                 public void onFailure(String error) {
                                     mProgressDialogHelper.dismissProgressDialog();
+                                    Log.d(TAG, "onFailure: " + error);
                                     Toast.makeText(RegistrationActivity.this, "Registration Failed " + error, Toast.LENGTH_SHORT).show();
                                 }
                             });

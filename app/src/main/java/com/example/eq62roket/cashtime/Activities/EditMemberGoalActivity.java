@@ -141,24 +141,29 @@ public class EditMemberGoalActivity extends AppCompatActivity {
     private void saveMemberGoal(){
         if ( !memberGoalName.getText().toString().equals("") &&
                 !memberGoalAmount.getText().toString().equals("")){
-            String nameOfGoal = memberGoalName.getText().toString();
-            String costOfGoal = memberGoalAmount.getText().toString();
-            String goalDeadline = memberGoalDueDate.getText().toString();
-            String goalNotes = memberGoalNote.getText().toString();
 
-            final MembersGoals membersGoalToUpdate = new MembersGoals();
-            membersGoalToUpdate.setMemberGoalAmount(costOfGoal);
-            membersGoalToUpdate.setMemberGoalName(nameOfGoal);
-            membersGoalToUpdate.setMemberGoalDueDate(goalDeadline);
-            membersGoalToUpdate.setMemberGoalNotes(goalNotes);
-            membersGoalToUpdate.setLocalUniqueID(memberGoalLocalUniqueID);
-            mParseHelper.updateMemberGoalInParseDb(membersGoalToUpdate);
+            if (Long.parseLong(memberGoalAmount.getText().toString()) < 1000000000) {
+                String nameOfGoal = memberGoalName.getText().toString();
+                String costOfGoal = memberGoalAmount.getText().toString();
+                String goalDeadline = memberGoalDueDate.getText().toString();
+                String goalNotes = memberGoalNote.getText().toString();
 
-            startTabbedGoalsActivity();
-            Toast.makeText(
-                    context,
-                    "Group Goal " + membersGoalToUpdate.getMemberGoalName() + " saved",
-                    Toast.LENGTH_SHORT).show();
+                final MembersGoals membersGoalToUpdate = new MembersGoals();
+                membersGoalToUpdate.setMemberGoalAmount(costOfGoal);
+                membersGoalToUpdate.setMemberGoalName(nameOfGoal);
+                membersGoalToUpdate.setMemberGoalDueDate(goalDeadline);
+                membersGoalToUpdate.setMemberGoalNotes(goalNotes);
+                membersGoalToUpdate.setLocalUniqueID(memberGoalLocalUniqueID);
+                mParseHelper.updateMemberGoalInParseDb(membersGoalToUpdate);
+
+                startTabbedGoalsActivity();
+                Toast.makeText(
+                        context,
+                        "Group Goal " + membersGoalToUpdate.getMemberGoalName() + " updated ",
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                memberGoalAmount.setError("Goal amount can not be greater than 1,000,000,000 ");
+            }
         }else {
             Toast.makeText(context, "All fields are required", Toast.LENGTH_SHORT).show();
         }
