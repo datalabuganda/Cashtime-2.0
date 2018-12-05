@@ -27,7 +27,7 @@ public class TipsToGroupGoalsActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.group_recycler_view);
 
-        new ParseHelper(TipsToGroupGoalsActivity.this).getActiveGroupGoalsFromParseDb(new ParseHelper.OnReturnedGroupGoalsListener() {
+        new ParseHelper(TipsToGroupGoalsActivity.this).getGroupGoalsFromParseDb(new ParseHelper.OnReturnedGroupGoalsListener() {
             @Override
             public void onResponse(List<GroupGoals> groupGoalsList) {
                 mAdapter = new GroupGoalsAdapter(TipsToGroupGoalsActivity.this, groupGoalsList, new GroupGoalsAdapter.OnGoalClickListener() {

@@ -59,7 +59,6 @@ public class MemberSavingToGoalsActivity extends AppCompatActivity implements Se
                             intent.putExtra("memberLocalUniqueID", membersGoals.getMemberLocalUniqueID());
                             intent.putExtra("memberGoalAmount", membersGoals.getMemberGoalAmount());
                             intent.putExtra("memberGoalDueDate", membersGoals.getMemberGoalDueDate());
-                            intent.putExtra("memberGroupLocalUniqueId", membersGoals.getMemberGroupLocalUniqueId());
                             startActivity(intent);
                             finish();
                         }

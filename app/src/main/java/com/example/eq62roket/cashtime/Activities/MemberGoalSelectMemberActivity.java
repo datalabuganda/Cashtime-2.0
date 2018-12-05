@@ -63,7 +63,6 @@ public class MemberGoalSelectMemberActivity extends AppCompatActivity implements
                                     addMemberGoalIntent.putExtra("groupMemberName", groupMemberUser.getMemberUsername());
                                     addMemberGoalIntent.putExtra("groupMemberGroupId", groupMemberUser.getMemberGroupLocalUniqueId());
                                     addMemberGoalIntent.putExtra("groupMemberLocalUniqueID", groupMemberUser.getLocalUniqueID());
-                                    addMemberGoalIntent.putExtra("memberGroupLocalUniqueId", groupMemberUser.getMemberGroupLocalUniqueId());
                                     startActivity(addMemberGoalIntent);
                                 }
                             });

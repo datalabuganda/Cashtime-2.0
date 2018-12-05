@@ -36,7 +36,7 @@ public class AddGroupMembersExpendituresActivity extends AppCompatActivity {
     SimpleDateFormat sdf = new SimpleDateFormat(dateFormat, Locale.US);
 
 
-    private String groupMemberLocalUniqueID, memberGroupLocalUniqueId;
+    private String groupMemberLocalUniqueID = "";
     private ParseExpenditureHelper mParseHelper;
 
     public static String[] expenditureCategories = {"Rent", "Food", "Medical", "Transport", "Leisure", "Others",
@@ -58,7 +58,6 @@ public class AddGroupMembersExpendituresActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String memberUserName = intent.getStringExtra("userName");
         groupMemberLocalUniqueID = intent.getStringExtra("groupMemberLocalUniqueID");
-        memberGroupLocalUniqueId = intent.getStringExtra("memberGroupLocalUniqueId");
 
         groupMemberUserName.setText(memberUserName);
 
@@ -111,8 +110,6 @@ public class AddGroupMembersExpendituresActivity extends AppCompatActivity {
             groupMemberExpenditure.setMemberUserName(groupMemberUsername);
             groupMemberExpenditure.setMemberLocalUniqueID(groupMemberLocalUniqueID);
             groupMemberExpenditure.setUserId(currentUser);
-            groupMemberExpenditure.setGroupStatus("active");
-            groupMemberExpenditure.setMemberGroupLocalUniqueId(memberGroupLocalUniqueId);
 
             new ParseExpenditureHelper(this).saveGroupMembersExpenditureToParseDb(groupMemberExpenditure);
             startTabbedExpenditureActivity();

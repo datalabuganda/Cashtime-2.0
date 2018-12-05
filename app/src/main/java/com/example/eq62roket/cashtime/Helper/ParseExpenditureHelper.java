@@ -60,7 +60,6 @@ public class ParseExpenditureHelper {
         newGroupExpenditure.put("groupName", groupExpenditure.getGroupName());
         newGroupExpenditure.put("groupLocalUniqueID", groupExpenditure.getGroupLocalUniqueID());
         newGroupExpenditure.put("createdById", groupExpenditure.getUserId());
-        newGroupExpenditure.put("groupStatus", groupExpenditure.getGroupStatus());
         newGroupExpenditure.pinInBackground();
         newGroupExpenditure.saveEventually();
 
@@ -69,9 +68,8 @@ public class ParseExpenditureHelper {
     public void getGroupExpenditureFromParseDb(final ParseExpenditureHelper.OnReturnedGroupExpenditureListener onReturnedGroupExpenditureListener){
         ParseQuery<GroupExpenditure> groupExpenditureQuery = ParseQuery.getQuery("ct2_GroupExpenditure");
         groupExpenditureQuery.fromLocalDatastore();
-        groupExpenditureQuery.whereEqualTo("groupStatus", "active");
-        groupExpenditureQuery.whereEqualTo("createdById", currentUserID);
         groupExpenditureQuery.addDescendingOrder("updatedAt");
+        groupExpenditureQuery.whereEqualTo("createdById", currentUserID);
         groupExpenditureQuery.findInBackground(new FindCallback<GroupExpenditure>() {
             @Override
             public void done(List<GroupExpenditure> parseGroupExpenditure, ParseException e) {
@@ -84,8 +82,6 @@ public class ParseExpenditureHelper {
                         newGroupExpenditure.setDate(retrievedGroupExpenditure.get("groupExpenditureDate").toString());
                         newGroupExpenditure.setGroupName(retrievedGroupExpenditure.get("groupName").toString());
                         newGroupExpenditure.setLocalUniqueID(retrievedGroupExpenditure.get("groupExpenditureLocalUniqueID").toString());
-                        newGroupExpenditure.setGroupStatus(retrievedGroupExpenditure.getString("groupStatus"));
-                        newGroupExpenditure.setGroupLocalUniqueID(retrievedGroupExpenditure.getString("groupLocalUniqueID"));
 
                         groupExpenditureList.add(newGroupExpenditure);
                     }
@@ -143,28 +139,6 @@ public class ParseExpenditureHelper {
         });
     }
 
-    public void updateGroupExpenditureGroupStatusInParseDb(final GroupExpenditure groupExpenditureToUpdate){
-        ParseQuery<GroupExpenditure> groupExpenditureQuery = ParseQuery.getQuery("ct2_GroupExpenditure");
-        groupExpenditureQuery.fromLocalDatastore();
-        groupExpenditureQuery.whereEqualTo("groupLocalUniqueID", groupExpenditureToUpdate.getGroupLocalUniqueID());
-        groupExpenditureQuery.findInBackground(new FindCallback<GroupExpenditure>() {
-            @Override
-            public void done(List<GroupExpenditure> groupExpenditureList, ParseException e) {
-                if (e == null) {
-                    for (GroupExpenditure groupExpenditure : groupExpenditureList){
-                        groupExpenditure.put("groupStatus", groupExpenditureToUpdate.getGroupStatus());
-                        groupExpenditure.pinInBackground();
-                        groupExpenditure.saveEventually();
-                    }
-                }else {
-                    Log.d(TAG, "Error: " + e.getMessage());
-                }
-            }
-        });
-    }
-
-
-
     /******************************** Members Expenditure Parse Helper ******************************/
     public void saveGroupMembersExpenditureToParseDb(GroupMemberExpenditure groupMembersExpenditure){
         GroupMemberExpenditure newGroupMembersExpenditure = new GroupMemberExpenditure();
@@ -176,8 +150,6 @@ public class ParseExpenditureHelper {
         newGroupMembersExpenditure.put("memberUsername", groupMembersExpenditure.getMemberUserName());
         newGroupMembersExpenditure.put("memberLocalUniqueID", groupMembersExpenditure.getMemberLocalUniqueID());
         newGroupMembersExpenditure.put("createdById", groupMembersExpenditure.getUserId());
-        newGroupMembersExpenditure.put("groupStatus", groupMembersExpenditure.getGroupStatus());
-        newGroupMembersExpenditure.put("memberGroupLocalUniqueId", groupMembersExpenditure.getMemberGroupLocalUniqueId());
         newGroupMembersExpenditure.pinInBackground();
         newGroupMembersExpenditure.saveEventually();
     }
@@ -185,9 +157,8 @@ public class ParseExpenditureHelper {
     public void getGroupMembersExpenditureFromParseDb(final ParseExpenditureHelper.OnReturnedGroupMembersExpenditureListener onReturnedGroupMembersExpenditureListener){
         ParseQuery<GroupMemberExpenditure> groupMemberExpenditureQuery = ParseQuery.getQuery("ct2_MemberExpenditure");
         groupMemberExpenditureQuery.fromLocalDatastore();
-        groupMemberExpenditureQuery.whereEqualTo("groupStatus", "active");
-        groupMemberExpenditureQuery.whereEqualTo("createdById", currentUserID);
         groupMemberExpenditureQuery.addDescendingOrder("updatedAt");
+        groupMemberExpenditureQuery.whereEqualTo("createdById", currentUserID);
         groupMemberExpenditureQuery.findInBackground(new FindCallback<GroupMemberExpenditure>() {
             @Override
             public void done(List<GroupMemberExpenditure> parseGroupMemberExpenditure, ParseException e) {
@@ -200,8 +171,6 @@ public class ParseExpenditureHelper {
                         newGroupMembersExpenditure.setDate(retrievedGroupMemberExpenditure.get("memberExpenditureDate").toString());
                         newGroupMembersExpenditure.setMemberUserName(retrievedGroupMemberExpenditure.get("memberUsername").toString());
                         newGroupMembersExpenditure.setLocalUniqueID(retrievedGroupMemberExpenditure.get("memberExpenditureLocalUniqueID").toString());
-                        newGroupMembersExpenditure.setMemberGroupLocalUniqueId(retrievedGroupMemberExpenditure.getString("memberGroupLocalUniqueId"));
-                        newGroupMembersExpenditure.setGroupStatus(retrievedGroupMemberExpenditure.getString("groupStatus"));
 
                         groupMembersExpenditureList.add(newGroupMembersExpenditure);
                     }
@@ -254,26 +223,6 @@ public class ParseExpenditureHelper {
                     }
                 }else {
                     Log.d(TAG, "Error Occurred: " + e.getMessage());
-                }
-            }
-        });
-    }
-
-    public void updateGroupMembersExpenditureGroupStatusInParseDb(final GroupMemberExpenditure groupMembersExpenditureToUpdate){
-        ParseQuery<GroupMemberExpenditure> groupMembersExpenditureQuery = ParseQuery.getQuery("ct2_MemberExpenditure");
-        groupMembersExpenditureQuery.fromLocalDatastore();
-        groupMembersExpenditureQuery.whereEqualTo("memberGroupLocalUniqueId", groupMembersExpenditureToUpdate.getMemberGroupLocalUniqueId());
-        groupMembersExpenditureQuery.findInBackground(new FindCallback<GroupMemberExpenditure>() {
-            @Override
-            public void done(List<GroupMemberExpenditure> groupMemberExpenditureList, ParseException e) {
-                if (e == null) {
-                    for (GroupMemberExpenditure groupMemberExpenditure : groupMemberExpenditureList){
-                        groupMemberExpenditure.put("groupStatus", groupMembersExpenditureToUpdate.getGroupStatus());
-                        groupMemberExpenditure.pinInBackground();
-                        groupMemberExpenditure.saveEventually();
-                    }
-                }else {
-                    Log.d(TAG, "Error: " + e.getMessage());
                 }
             }
         });

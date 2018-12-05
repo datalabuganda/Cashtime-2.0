@@ -64,7 +64,7 @@ public class MembersGoalsFragment extends Fragment implements SearchView.OnQuery
             }
         });
 
-        new ParseHelper(getActivity()).getActiveMemberGoalsFromParseDb(new OnReturnedMemberGoalListener() {
+        new ParseHelper(getActivity()).getAllMemberGoalsFromParseDb(new OnReturnedMemberGoalListener() {
             @Override
             public void onResponse(List<MembersGoals> membersGoalsList) {
                 if (membersGoalsList.isEmpty()){

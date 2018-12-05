@@ -52,6 +52,9 @@ public class GoalsToGroupActivity extends AppCompatActivity {
                         Intent groupDetailsIntent = new Intent(GoalsToGroupActivity.this, AddGroupGoalsActivity.class);
                         groupDetailsIntent.putExtra("groupLocalUniqueID", group.getLocalUniqueID());
                         groupDetailsIntent.putExtra("groupName", group.getGroupName());
+//                        groupDetailsIntent.putExtra("groupCentreName", group.getGroupCentreName());
+//                        groupDetailsIntent.putExtra("groupLocation", group.getLocationOfGroup());
+//                        groupDetailsIntent.putExtra("groupMemberCount", String.valueOf(group.getGroupMemberCount()));
                         startActivity(groupDetailsIntent);
                         finish();
 

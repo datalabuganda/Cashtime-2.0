@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -16,7 +16,6 @@ import com.example.eq62roket.cashtime.Interfaces.OnReturnedGroupMemberListener;
 import com.example.eq62roket.cashtime.Models.Group;
 import com.example.eq62roket.cashtime.Models.GroupMember;
 import com.example.eq62roket.cashtime.R;
-import com.weiwangcn.betterspinner.library.material.MaterialBetterSpinner;
 
 import java.util.List;
 
@@ -33,14 +32,6 @@ public class EditGroupMemberActivity extends AppCompatActivity {
     private String groupMemberLocalUniqueID;
     private ParseGroupHelper mParseGroupHelper;
 
-    public static String[] nationalityCategories = {"Ugandan", "Kenyan", "Rwandan", "Congolese", "Tanzanian",
-            "South Sudanese"};
-
-    public static String[] genderCategories = {"Male", "Female"};
-
-    public static String[] levelOfEducationCategories = {"Primary", "O Level", "A Level", "University",
-            "Institution"};
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,10 +44,6 @@ public class EditGroupMemberActivity extends AppCompatActivity {
         final String memberGroupLocalUniqueId = editGroupMemberIntent.getStringExtra("memberGroupLocalUniqueId");
         final String usernameOfGroupUser = editGroupMemberIntent.getStringExtra("groupMemberName");
         final String groupMemberCount = editGroupMemberIntent.getStringExtra("groupMemberCount");
-
-        nationalityCategory();
-        genderCategory();
-        levelOfEducationCategory();
 
         groupMemberUsername = (EditText) findViewById(R.id.groupMemberUsername);
         groupMemberBusiness = (EditText) findViewById(R.id.groupMembersBusiness);
@@ -107,12 +94,14 @@ public class EditGroupMemberActivity extends AppCompatActivity {
             }
         });
 
+
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 updateMemberUserInfo();
             }
         });
+
     }
 
     public void prepopulateUIWithUserInfo(){
@@ -170,45 +159,11 @@ public class EditGroupMemberActivity extends AppCompatActivity {
         }else {
             Toast.makeText(EditGroupMemberActivity.this, "All Fields are required", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     public void startGroupMembersActivity(){
         Intent intent = new Intent(EditGroupMemberActivity.this, GroupsActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    public void nationalityCategory(){
-        ArrayAdapter<String> nationalityAdapter = new ArrayAdapter<String>(
-                this,
-                R.layout.support_simple_spinner_dropdown_item,
-                nationalityCategories
-        );
-
-        MaterialBetterSpinner materialNationalitySpinner = findViewById(R.id.groupMembersNationality);
-        materialNationalitySpinner.setAdapter(nationalityAdapter);
-    }
-
-    public void genderCategory(){
-        ArrayAdapter<String> genderAdapter = new ArrayAdapter<String>(
-                this,
-                R.layout.support_simple_spinner_dropdown_item,
-                genderCategories
-        );
-
-        MaterialBetterSpinner materialGenderSpinner = findViewById(R.id.groupMembersGender);
-        materialGenderSpinner.setAdapter(genderAdapter);
-    }
-
-    public void levelOfEducationCategory(){
-        ArrayAdapter<String> levelOfEducationAdapter = new ArrayAdapter<String>(
-                this,
-                R.layout.support_simple_spinner_dropdown_item,
-                levelOfEducationCategories
-        );
-
-        MaterialBetterSpinner materialLevelOfEducationSpinner =  findViewById(R.id.groupMembersEducationLevel);
-        materialLevelOfEducationSpinner.setAdapter(levelOfEducationAdapter);
     }
 }

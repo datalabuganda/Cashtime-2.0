@@ -47,33 +47,14 @@
                     android:textColor="@color/black"
                     android:textStyle="bold"/>
 
-                <LinearLayout
-                    android:orientation="horizontal"
+                <TextView
+                    android:id="@+id/memberPhoneNumber"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/memberPhoneNumber"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="0703627654"
-                        android:layout_marginTop="5dp"
-                        android:textSize="14sp"
-                        android:textColor="@color/red" />
-
-                    <TextView
-                        android:id="@+id/isAdmin"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="admin"
-                        android:layout_marginLeft="110dp"
-                        android:layout_marginTop="5dp"
-                        android:textSize="14sp"
-                        android:visibility="gone"
-                        android:textColor="@color/red" />
-
-                </LinearLayout>
-
+                    android:layout_height="wrap_content"
+                    android:text="0703627654"
+                    android:layout_marginTop="5dp"
+                    android:textSize="14sp"
+                    android:textColor="@color/red" />
             </LinearLayout>
         </LinearLayout>
     </android.support.v7.widget.CardView>

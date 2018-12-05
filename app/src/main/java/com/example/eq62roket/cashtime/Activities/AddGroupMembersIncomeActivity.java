@@ -33,8 +33,7 @@ public class AddGroupMembersIncomeActivity extends AppCompatActivity {
     private MaterialBetterSpinner materialPeriodSpinner;
     private Context context = this;
     private DatePickerDialog.OnDateSetListener date;
-    private String groupMemberLocalUniqueID;
-    private String memberGroupLocalUniqueId;
+    private String groupMemberLocalUniqueID = "";
     private String selectedPeriod;
     private ParseIncomeHelper mParseHelper;
 
@@ -72,7 +71,6 @@ public class AddGroupMembersIncomeActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String memberUserName = intent.getStringExtra("userName");
         groupMemberLocalUniqueID = intent.getStringExtra("groupMemberLocalUniqueID");
-        memberGroupLocalUniqueId = intent.getStringExtra("memberGroupLocalUniqueId");
 
         groupMemberUserName.setText(memberUserName);
 
@@ -159,9 +157,7 @@ public class AddGroupMembersIncomeActivity extends AppCompatActivity {
             groupMemberIncome.setNotes(groupMemberIncomeNotes);
             groupMemberIncome.setMemberUserName(groupMemberUsername);
             groupMemberIncome.setMemberLocalUniqueID(groupMemberLocalUniqueID);
-            groupMemberIncome.setMemberGroupLocalUniqueId(memberGroupLocalUniqueId);
             groupMemberIncome.setUserId(currentUser);
-            groupMemberIncome.setGroupStatus("active");
 
             new ParseIncomeHelper(this).saveGroupMemberIncomeToParseDb(groupMemberIncome);
             startTabbedIncomeActivity();

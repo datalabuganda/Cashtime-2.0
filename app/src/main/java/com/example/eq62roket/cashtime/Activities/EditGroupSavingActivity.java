@@ -99,6 +99,7 @@ public class EditGroupSavingActivity extends AppCompatActivity {
                 builder.setMessage(
                         "Deleting saving for '" + nameOfGoal + "' Can not be undone." + "Are You Sure You want to delete this saving?").setTitle("Delete Saving");
 
+
                 AlertDialog dialog = builder.create();
                 dialog.show();
 
@@ -169,6 +170,7 @@ public class EditGroupSavingActivity extends AppCompatActivity {
 
     public void saveSavingTransaction(){
         String savingPeriod = "";
+        // pick goalName again
         String nameOfGoal = goalName.getText().toString();
 
         if ( !savingAmount.getText().toString().equals("")
@@ -176,43 +178,38 @@ public class EditGroupSavingActivity extends AppCompatActivity {
                 selectedPeriod != null &&
                 selectedIncomeSource != null){
 
-            if (Long.parseLong(savingAmount.getText().toString()) < 1000000000) {
+            String amountSaved = savingAmount.getText().toString();
+            String note = savingNote.getText().toString();
 
-                String amountSaved = savingAmount.getText().toString();
-                String note = savingNote.getText().toString();
+            Date today = new Date();
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+            String dateToday = simpleDateFormat.format(today);
 
-                Date today = new Date();
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-                String dateToday = simpleDateFormat.format(today);
+            if (selectedPeriod == "Daily"){
+                savingPeriod = new PeriodHelper().getDailyDate();
+            }else if (selectedPeriod == "Weekly"){
+                savingPeriod = new PeriodHelper().getWeeklyDate();
+            }else if (selectedPeriod == "Monthly"){
+                savingPeriod = new PeriodHelper().getMonthlyDate();
+            }
+            if ( !selectedPeriod.equals("")){
+                GroupSavings groupSavingToUpdate = new GroupSavings();
+                groupSavingToUpdate.setGoalName(nameOfGoal);
+                groupSavingToUpdate.setAmount(amountSaved);
+                groupSavingToUpdate.setPeriod(selectedPeriod);
+                groupSavingToUpdate.setIncomeSource(selectedIncomeSource);
+                groupSavingToUpdate.setNotes(note);
+                groupSavingToUpdate.setLocalUniqueID(groupSavingLocalUniqueID);
 
-                if (selectedPeriod.equals("Daily")) {
-                    savingPeriod = new PeriodHelper().getDailyDate();
-                } else if (selectedPeriod.equals("Weekly")) {
-                    savingPeriod = new PeriodHelper().getWeeklyDate();
-                } else if (selectedPeriod.equals("Monthly")) {
-                    savingPeriod = new PeriodHelper().getMonthlyDate();
-                }
-                if (!selectedPeriod.equals("")) {
-                    GroupSavings groupSavingToUpdate = new GroupSavings();
-                    groupSavingToUpdate.setGoalName(nameOfGoal);
-                    groupSavingToUpdate.setAmount(amountSaved);
-                    groupSavingToUpdate.setPeriod(selectedPeriod);
-                    groupSavingToUpdate.setIncomeSource(selectedIncomeSource);
+                if (note.trim().equals("")){
+                    groupSavingToUpdate.setNotes("No notes");
+                }else {
                     groupSavingToUpdate.setNotes(note);
-                    groupSavingToUpdate.setLocalUniqueID(groupSavingLocalUniqueID);
-
-                    if (note.trim().equals("")) {
-                        groupSavingToUpdate.setNotes("No notes");
-                    } else {
-                        groupSavingToUpdate.setNotes(note);
-                    }
-                    mParseHelper.updateGroupSavingInParseDb(groupSavingToUpdate);
-
-                    startTabbedSavingActivity();
-                    Toast.makeText(EditGroupSavingActivity.this, "Saving Updated", Toast.LENGTH_SHORT).show();
                 }
-            } else {
-                savingAmount.setError("Saving amount can not be greater than 1,000,000,000");
+                mParseHelper.updateGroupSavingInParseDb(groupSavingToUpdate);
+
+                startTabbedSavingActivity();
+                Toast.makeText(EditGroupSavingActivity.this, "Saving Updated", Toast.LENGTH_SHORT).show();
             }
         } else {
             Toast.makeText(this, "All fields are required.", Toast.LENGTH_SHORT).show();

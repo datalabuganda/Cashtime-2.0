@@ -9,15 +9,7 @@ import com.parse.ParseObject;
 @ParseClassName("ct2_GroupExpenditure")
 public class GroupExpenditure extends ParseObject {
     private String category, categoryId, date, amount, notes, groupName;
-    private String groupLocalUniqueID, localUniqueID, userId, groupStatus;
-
-    public String getGroupStatus() {
-        return groupStatus;
-    }
-
-    public void setGroupStatus(String groupStatus) {
-        this.groupStatus = groupStatus;
-    }
+    private String groupLocalUniqueID, localUniqueID, userId;
 
     public String getGroupName() {
         return groupName;

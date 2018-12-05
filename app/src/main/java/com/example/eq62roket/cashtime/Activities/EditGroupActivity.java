@@ -10,20 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.eq62roket.cashtime.Helper.ParseExpenditureHelper;
 import com.example.eq62roket.cashtime.Helper.ParseGroupHelper;
-import com.example.eq62roket.cashtime.Helper.ParseHelper;
-import com.example.eq62roket.cashtime.Helper.ParseIncomeHelper;
 import com.example.eq62roket.cashtime.Models.Group;
-import com.example.eq62roket.cashtime.Models.GroupExpenditure;
-import com.example.eq62roket.cashtime.Models.GroupGoals;
-import com.example.eq62roket.cashtime.Models.GroupIncome;
-import com.example.eq62roket.cashtime.Models.GroupMember;
-import com.example.eq62roket.cashtime.Models.GroupMemberExpenditure;
-import com.example.eq62roket.cashtime.Models.GroupSavings;
-import com.example.eq62roket.cashtime.Models.MemberSavings;
-import com.example.eq62roket.cashtime.Models.MembersGoals;
-import com.example.eq62roket.cashtime.Models.MembersIncome;
 import com.example.eq62roket.cashtime.R;
 
 public class EditGroupActivity extends AppCompatActivity {
@@ -36,9 +24,6 @@ public class EditGroupActivity extends AppCompatActivity {
     private String groupCentreName;
     private String nameOfGroup;
     private ParseGroupHelper mParseGroupHelper;
-    private ParseHelper mParseHelper;
-    private ParseIncomeHelper mParseIncomeHelper;
-    private ParseExpenditureHelper mParseExpenditureHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,9 +31,6 @@ public class EditGroupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_group);
 
         mParseGroupHelper = new ParseGroupHelper(EditGroupActivity.this);
-        mParseHelper = new ParseHelper(EditGroupActivity.this);
-        mParseIncomeHelper = new ParseIncomeHelper(EditGroupActivity.this);
-        mParseExpenditureHelper = new ParseExpenditureHelper(EditGroupActivity.this);
 
         Intent groupIntent = getIntent();
         groupLocalUniqueID = groupIntent.getStringExtra("groupLocalUniqueID");
@@ -108,16 +90,6 @@ public class EditGroupActivity extends AppCompatActivity {
                         mParseGroupHelper.deleteAllGroupMembersFromParseDb(groupLocalUniqueID);
                         mParseGroupHelper.deleteGroupFromParseDb(groupToDelete);
 
-                        updateGroupGoalGroupStatus(groupLocalUniqueID);
-                        updateMemberGoalGroupStatus(groupLocalUniqueID);
-                        updateGroupMemberGroupStatus(groupLocalUniqueID);
-                        updateGroupSavingsGroupStatus(groupLocalUniqueID);
-                        updateMemberSavingsGroupStatus(groupLocalUniqueID);
-                        updateGroupIncomeGroupStatus(groupLocalUniqueID);
-                        updateMemberIncomeGroupStatus(groupLocalUniqueID);
-                        updateGroupExpenditureGroupStatus(groupLocalUniqueID);
-                        updateMemberExpenditureGroupStatus(groupLocalUniqueID);
-
                         startGroupsActivity();
                         Toast.makeText(EditGroupActivity.this, "Group deleted successfully", Toast.LENGTH_SHORT).show();
 
@@ -145,77 +117,5 @@ public class EditGroupActivity extends AppCompatActivity {
         Intent homeActivityIntent = new Intent(EditGroupActivity.this, GroupsActivity.class);
         startActivity(homeActivityIntent);
         finish();
-    }
-
-    public void updateMemberGoalGroupStatus(String groupLocalUniqueID){
-        MembersGoals membersGoals = new MembersGoals();
-        membersGoals.setGroupStatus("deleted");
-        membersGoals.setMemberGroupLocalUniqueId(groupLocalUniqueID);
-
-        mParseHelper.updateMemberGoalGroupStatusInParseDb(membersGoals);
-    }
-
-    public void updateGroupGoalGroupStatus(String groupLocalUniqueID){
-        GroupGoals groupGoal = new GroupGoals();
-        groupGoal.setGroupLocalUniqueID(groupLocalUniqueID);
-        groupGoal.setGroupStatus("deleted");
-
-        mParseHelper.updateGroupGoalGroupStatusInParseDb(groupGoal);
-    }
-
-    public void updateGroupMemberGroupStatus(String groupLocalUniqueID) {
-        GroupMember groupMember = new GroupMember();
-        groupMember.setGroupStatus("deleted");
-        groupMember.setMemberGroupLocalUniqueId(groupLocalUniqueID);
-
-        mParseGroupHelper.updateGroupMemberGroupStatusInParseDb(groupMember);
-    }
-
-    public void updateGroupSavingsGroupStatus(String groupLocalUniqueID) {
-        GroupSavings groupSaving = new GroupSavings();
-        groupSaving.setGroupStatus("deleted");
-        groupSaving.setGroupLocalUniqueID(groupLocalUniqueID);
-
-        mParseHelper.updateGroupSavingGroupStatusInParseDb(groupSaving);
-    }
-
-    public void updateMemberSavingsGroupStatus(String groupLocalUniqueID) {
-        MemberSavings memberSaving = new MemberSavings();
-        memberSaving.setGroupStatus("deleted");
-        memberSaving.setGroupLocalUniqueID(groupLocalUniqueID);
-
-        mParseHelper.updateMemberSavingGroupStatusInParseDb(memberSaving);
-    }
-
-    public void updateGroupIncomeGroupStatus(String groupLocalUniqueID) {
-        GroupIncome groupIncome = new GroupIncome();
-        groupIncome.setGroupStatus("deleted");
-        groupIncome.setGroupLocalUniqueID(groupLocalUniqueID);
-
-        mParseIncomeHelper.updateGroupIncomeGroupStatusInParseDb(groupIncome);
-    }
-
-    public void updateMemberIncomeGroupStatus(String groupLocalUniqueID) {
-        MembersIncome membersIncome = new MembersIncome();
-        membersIncome.setGroupStatus("deleted");
-        membersIncome.setMemberGroupLocalUniqueId(groupLocalUniqueID);
-
-        mParseIncomeHelper.updateGroupMemberIncomeGroupStatusInParseDb(membersIncome);
-    }
-
-    public void updateGroupExpenditureGroupStatus(String groupLocalUniqueID) {
-        GroupExpenditure groupExpenditure = new GroupExpenditure();
-        groupExpenditure.setGroupStatus("deleted");
-        groupExpenditure.setGroupLocalUniqueID(groupLocalUniqueID);
-
-        mParseExpenditureHelper.updateGroupExpenditureGroupStatusInParseDb(groupExpenditure);
-    }
-
-    public void updateMemberExpenditureGroupStatus(String groupLocalUniqueID) {
-        GroupMemberExpenditure groupMemberExpenditure = new GroupMemberExpenditure();
-        groupMemberExpenditure.setGroupStatus("deleted");
-        groupMemberExpenditure.setMemberGroupLocalUniqueId(groupLocalUniqueID);
-
-        mParseExpenditureHelper.updateGroupMembersExpenditureGroupStatusInParseDb(groupMemberExpenditure);
     }
 }
