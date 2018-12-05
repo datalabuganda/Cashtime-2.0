@@ -169,7 +169,6 @@ public class EditGroupSavingActivity extends AppCompatActivity {
 
     public void saveSavingTransaction(){
         String savingPeriod = "";
-        // pick goalName again
         String nameOfGoal = goalName.getText().toString();
 
         if ( !savingAmount.getText().toString().equals("")
@@ -177,38 +176,43 @@ public class EditGroupSavingActivity extends AppCompatActivity {
                 selectedPeriod != null &&
                 selectedIncomeSource != null){
 
-            String amountSaved = savingAmount.getText().toString();
-            String note = savingNote.getText().toString();
+            if (Long.parseLong(savingAmount.getText().toString()) < 1000000000) {
 
-            Date today = new Date();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-            String dateToday = simpleDateFormat.format(today);
+                String amountSaved = savingAmount.getText().toString();
+                String note = savingNote.getText().toString();
 
-            if (selectedPeriod == "Daily"){
-                savingPeriod = new PeriodHelper().getDailyDate();
-            }else if (selectedPeriod == "Weekly"){
-                savingPeriod = new PeriodHelper().getWeeklyDate();
-            }else if (selectedPeriod == "Monthly"){
-                savingPeriod = new PeriodHelper().getMonthlyDate();
-            }
-            if ( !selectedPeriod.equals("")){
-                GroupSavings groupSavingToUpdate = new GroupSavings();
-                groupSavingToUpdate.setGoalName(nameOfGoal);
-                groupSavingToUpdate.setAmount(amountSaved);
-                groupSavingToUpdate.setPeriod(selectedPeriod);
-                groupSavingToUpdate.setIncomeSource(selectedIncomeSource);
-                groupSavingToUpdate.setNotes(note);
-                groupSavingToUpdate.setLocalUniqueID(groupSavingLocalUniqueID);
+                Date today = new Date();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                String dateToday = simpleDateFormat.format(today);
 
-                if (note.trim().equals("")){
-                    groupSavingToUpdate.setNotes("No notes");
-                }else {
-                    groupSavingToUpdate.setNotes(note);
+                if (selectedPeriod.equals("Daily")) {
+                    savingPeriod = new PeriodHelper().getDailyDate();
+                } else if (selectedPeriod.equals("Weekly")) {
+                    savingPeriod = new PeriodHelper().getWeeklyDate();
+                } else if (selectedPeriod.equals("Monthly")) {
+                    savingPeriod = new PeriodHelper().getMonthlyDate();
                 }
-                mParseHelper.updateGroupSavingInParseDb(groupSavingToUpdate);
+                if (!selectedPeriod.equals("")) {
+                    GroupSavings groupSavingToUpdate = new GroupSavings();
+                    groupSavingToUpdate.setGoalName(nameOfGoal);
+                    groupSavingToUpdate.setAmount(amountSaved);
+                    groupSavingToUpdate.setPeriod(selectedPeriod);
+                    groupSavingToUpdate.setIncomeSource(selectedIncomeSource);
+                    groupSavingToUpdate.setNotes(note);
+                    groupSavingToUpdate.setLocalUniqueID(groupSavingLocalUniqueID);
 
-                startTabbedSavingActivity();
-                Toast.makeText(EditGroupSavingActivity.this, "Saving Updated", Toast.LENGTH_SHORT).show();
+                    if (note.trim().equals("")) {
+                        groupSavingToUpdate.setNotes("No notes");
+                    } else {
+                        groupSavingToUpdate.setNotes(note);
+                    }
+                    mParseHelper.updateGroupSavingInParseDb(groupSavingToUpdate);
+
+                    startTabbedSavingActivity();
+                    Toast.makeText(EditGroupSavingActivity.this, "Saving Updated", Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                savingAmount.setError("Saving amount can not be greater than 1,000,000,000");
             }
         } else {
             Toast.makeText(this, "All fields are required.", Toast.LENGTH_SHORT).show();

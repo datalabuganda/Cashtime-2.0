@@ -156,108 +156,112 @@ public class AddMemberSavingsActivity extends AppCompatActivity {
                 selectedPeriod != null &&
                 selectedIncomeSource != null) {
 
-            final MembersGoals membersGoal = new MembersGoals();
-            membersGoal.setLocalUniqueID(memberGoalLocalUniqueID);
-            membersGoal.setMemberGoalDueDate(memberGoalDueDate);
-            membersGoal.setMemberGoalAmount(memberGoalAmount);
-            membersGoal.setMemberLocalUniqueID(memberLocalUniqueID);
-            new ParseHelper(AddMemberSavingsActivity.this).
-                    getTotalMemberSavingsFromParseDb(membersGoal, new OnReturnedMemberSavingsSumListener() {
-                @Override
-                public void onResponse(int memberGoalTotalSavings) {
-                    String amountSaved = savingAmount.getText().toString();
-                    String note = savingNote.getText().toString();
+            if (Long.parseLong(savingAmount.getText().toString()) < 1000000000) {
+                final MembersGoals membersGoal = new MembersGoals();
+                membersGoal.setLocalUniqueID(memberGoalLocalUniqueID);
+                membersGoal.setMemberGoalDueDate(memberGoalDueDate);
+                membersGoal.setMemberGoalAmount(memberGoalAmount);
+                membersGoal.setMemberLocalUniqueID(memberLocalUniqueID);
+                new ParseHelper(AddMemberSavingsActivity.this).
+                        getTotalMemberSavingsFromParseDb(membersGoal, new OnReturnedMemberSavingsSumListener() {
+                            @Override
+                            public void onResponse(int memberGoalTotalSavings) {
+                                String amountSaved = savingAmount.getText().toString();
+                                String note = savingNote.getText().toString();
 
-                    int groupGoalTotalCost = Integer.parseInt(membersGoal.getMemberGoalAmount());
-                    int amountToSave = Integer.valueOf(amountSaved);
-                    int amountRemaining = groupGoalTotalCost - (memberGoalTotalSavings + amountToSave);
+                                int groupGoalTotalCost = Integer.parseInt(membersGoal.getMemberGoalAmount());
+                                int amountToSave = Integer.valueOf(amountSaved);
+                                int amountRemaining = groupGoalTotalCost - (memberGoalTotalSavings + amountToSave);
 
-                    if ( amountToSave > amountRemaining && amountRemaining != 0 ){
-                        int userRemainingAmount = 0;
-                        if (amountRemaining < 0){
-                            userRemainingAmount = groupGoalTotalCost - memberGoalTotalSavings;
-                        }else {
-                            userRemainingAmount = amountRemaining;
-                        }
-                        Toast.makeText(
-                                AddMemberSavingsActivity.this,
-                                "You can not save " + amountToSave + ", you need " + userRemainingAmount + " to complete your goal",
-                                Toast.LENGTH_LONG).show();
-                    }else {
-                        Date today = new Date();
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-                        String dateToday = simpleDateFormat.format(today);
+                                if ( amountToSave > amountRemaining && amountRemaining != 0 ){
+                                    int userRemainingAmount = 0;
+                                    if (amountRemaining < 0){
+                                        userRemainingAmount = groupGoalTotalCost - memberGoalTotalSavings;
+                                    }else {
+                                        userRemainingAmount = amountRemaining;
+                                    }
+                                    Toast.makeText(
+                                            AddMemberSavingsActivity.this,
+                                            "You can not save " + amountToSave + ", you need " + userRemainingAmount + " to complete your goal",
+                                            Toast.LENGTH_LONG).show();
+                                }else {
+                                    Date today = new Date();
+                                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                                    String dateToday = simpleDateFormat.format(today);
 
-                        try {
-                            Date memberGoalDueDate = simpleDateFormat.parse(membersGoal.getMemberGoalDueDate());
-                            Date todayZdate = simpleDateFormat.parse(dateToday);
-                            MembersGoals completedmemberGoal = new MembersGoals();
-                            completedmemberGoal.setLocalUniqueID(memberGoalLocalUniqueID);
-                            completedmemberGoal.setMemberLocalUniqueID(memberLocalUniqueID);
+                                    try {
+                                        Date memberGoalDueDate = simpleDateFormat.parse(membersGoal.getMemberGoalDueDate());
+                                        Date todayZdate = simpleDateFormat.parse(dateToday);
+                                        MembersGoals completedmemberGoal = new MembersGoals();
+                                        completedmemberGoal.setLocalUniqueID(memberGoalLocalUniqueID);
+                                        completedmemberGoal.setMemberLocalUniqueID(memberLocalUniqueID);
 
-                            if ( amountRemaining == 0 && todayZdate.before(memberGoalDueDate) ){
-                                completedmemberGoal.setMemberGoalStatus("completed");
-                                completedmemberGoal.setCompleteDate(dateToday);
-                                mParseHelper.updateMemberGoalCompleteStatusInParseDb(completedmemberGoal);
-                            }else if (amountRemaining == 0 && todayZdate.equals(memberGoalDueDate)){
-                                completedmemberGoal.setMemberGoalStatus("completed");
-                                completedmemberGoal.setCompleteDate(dateToday);
-                                mParseHelper.updateMemberGoalCompleteStatusInParseDb(completedmemberGoal);
-                            }else if (amountRemaining != 0 && todayZdate.after(memberGoalDueDate)){
-                                completedmemberGoal.setMemberGoalStatus("failed");
-                                completedmemberGoal.setCompleteDate(dateToday);
-                                mParseHelper.updateMemberGoalCompleteStatusInParseDb(completedmemberGoal);
-                            }else {
-                                completedmemberGoal.setMemberGoalStatus("incomplete");
-                                completedmemberGoal.setCompleteDate("");
-                                mParseHelper.updateMemberGoalCompleteStatusInParseDb(completedmemberGoal);
+                                        if ( amountRemaining == 0 && todayZdate.before(memberGoalDueDate) ){
+                                            completedmemberGoal.setMemberGoalStatus("completed");
+                                            completedmemberGoal.setCompleteDate(dateToday);
+                                            mParseHelper.updateMemberGoalCompleteStatusInParseDb(completedmemberGoal);
+                                        }else if (amountRemaining == 0 && todayZdate.equals(memberGoalDueDate)){
+                                            completedmemberGoal.setMemberGoalStatus("completed");
+                                            completedmemberGoal.setCompleteDate(dateToday);
+                                            mParseHelper.updateMemberGoalCompleteStatusInParseDb(completedmemberGoal);
+                                        }else if (amountRemaining != 0 && todayZdate.after(memberGoalDueDate)){
+                                            completedmemberGoal.setMemberGoalStatus("failed");
+                                            completedmemberGoal.setCompleteDate(dateToday);
+                                            mParseHelper.updateMemberGoalCompleteStatusInParseDb(completedmemberGoal);
+                                        }else {
+                                            completedmemberGoal.setMemberGoalStatus("incomplete");
+                                            completedmemberGoal.setCompleteDate("");
+                                            mParseHelper.updateMemberGoalCompleteStatusInParseDb(completedmemberGoal);
+                                        }
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+
+                                    if (selectedPeriod == "Daily"){
+                                        savingPeriod[0] = new PeriodHelper().getDailyDate();
+                                    }else if (selectedPeriod == "Weekly"){
+                                        savingPeriod[0] = new PeriodHelper().getWeeklyDate();
+                                    }else if (selectedPeriod == "Monthly"){
+                                        savingPeriod[0] = new PeriodHelper().getMonthlyDate();
+                                    }
+
+                                    MemberSavings newMemberSaving = new MemberSavings();
+                                    newMemberSaving.setGoalName(nameOfGoal);
+                                    newMemberSaving.setMemberName(nameOfMember);
+                                    newMemberSaving.setSavingAmount(amountSaved);
+                                    newMemberSaving.setPeriod(selectedPeriod);
+                                    newMemberSaving.setIncomeSource(selectedIncomeSource);
+                                    newMemberSaving.setDateAdded(dateToday);
+                                    newMemberSaving.setMemberGoalLocalUniqueID(memberGoalLocalUniqueID);
+                                    newMemberSaving.setMemberLocalUniqueID(memberLocalUniqueID);
+                                    newMemberSaving.setGroupStatus("active");
+                                    newMemberSaving.setGroupLocalUniqueID(memberGroupLocalUniqueId);
+                                    if (note.trim().equals("")){
+                                        newMemberSaving.setSavingNote("No Notes");
+                                    }else {
+                                        newMemberSaving.setSavingNote(note);
+                                    }
+                                    mParseHelper.saveMemberSavingsToParseDb(newMemberSaving);
+
+                                    startTabbedSavingActivity();
+                                    Toast.makeText(AddMemberSavingsActivity.this, "Saving recorded", Toast.LENGTH_SHORT).show();
+
+                                    // TODO: 3/21/18 ======>>>>> award user points
+                                    // Award user 3 point for saving
+                                    User user = new User();
+                                    user.setPoints(3);
+
+                                }
                             }
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
 
-                        if (selectedPeriod == "Daily"){
-                            savingPeriod[0] = new PeriodHelper().getDailyDate();
-                        }else if (selectedPeriod == "Weekly"){
-                            savingPeriod[0] = new PeriodHelper().getWeeklyDate();
-                        }else if (selectedPeriod == "Monthly"){
-                            savingPeriod[0] = new PeriodHelper().getMonthlyDate();
-                        }
+                            @Override
+                            public void onFailure(String error) {
 
-                        MemberSavings newMemberSaving = new MemberSavings();
-                        newMemberSaving.setGoalName(nameOfGoal);
-                        newMemberSaving.setMemberName(nameOfMember);
-                        newMemberSaving.setSavingAmount(amountSaved);
-                        newMemberSaving.setPeriod(selectedPeriod);
-                        newMemberSaving.setIncomeSource(selectedIncomeSource);
-                        newMemberSaving.setDateAdded(dateToday);
-                        newMemberSaving.setMemberGoalLocalUniqueID(memberGoalLocalUniqueID);
-                        newMemberSaving.setMemberLocalUniqueID(memberLocalUniqueID);
-                        newMemberSaving.setGroupStatus("active");
-                        newMemberSaving.setGroupLocalUniqueID(memberGroupLocalUniqueId);
-                        if (note.trim().equals("")){
-                            newMemberSaving.setSavingNote("No Notes");
-                        }else {
-                            newMemberSaving.setSavingNote(note);
-                        }
-                        mParseHelper.saveMemberSavingsToParseDb(newMemberSaving);
-
-                        startTabbedSavingActivity();
-                        Toast.makeText(AddMemberSavingsActivity.this, "Saving recorded", Toast.LENGTH_SHORT).show();
-
-                        // TODO: 3/21/18 ======>>>>> award user points
-                        // Award user 3 point for saving
-                        User user = new User();
-                        user.setPoints(3);
-
-                    }
-                }
-
-                @Override
-                public void onFailure(String error) {
-
-                }
-            });
+                            }
+                        });
+            } else {
+                savingAmount.setError("Saving amount can not be greater than 1,000,000,000");
+            }
         } else {
             Toast.makeText(this, "All fields are required.", Toast.LENGTH_SHORT).show();
         }

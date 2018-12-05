@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -54,6 +53,10 @@ public class EditGroupMemberActivity extends AppCompatActivity {
         final String memberGroupLocalUniqueId = editGroupMemberIntent.getStringExtra("memberGroupLocalUniqueId");
         final String usernameOfGroupUser = editGroupMemberIntent.getStringExtra("groupMemberName");
         final String groupMemberCount = editGroupMemberIntent.getStringExtra("groupMemberCount");
+
+        nationalityCategory();
+        genderCategory();
+        levelOfEducationCategory();
 
         groupMemberUsername = (EditText) findViewById(R.id.groupMemberUsername);
         groupMemberBusiness = (EditText) findViewById(R.id.groupMembersBusiness);
@@ -168,9 +171,6 @@ public class EditGroupMemberActivity extends AppCompatActivity {
             Toast.makeText(EditGroupMemberActivity.this, "All Fields are required", Toast.LENGTH_SHORT).show();
         }
 
-        nationalityCategory();
-        genderCategory();
-        levelOfEducationCategory();
     }
 
     public void startGroupMembersActivity(){

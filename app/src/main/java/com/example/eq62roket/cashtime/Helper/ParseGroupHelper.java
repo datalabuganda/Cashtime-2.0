@@ -341,7 +341,7 @@ public class ParseGroupHelper {
                         groupMembers.get(0).put("memberUsername", groupMemberToUpdate.getMemberUsername());
                         groupMembers.get(0).put("memberPhoneNumber", groupMemberToUpdate.getMemberPhoneNumber());
                         groupMembers.get(0).put("memberHousehold", groupMemberToUpdate.getMemberHousehold());
-                        groupMembers.get(0).put("memberGender", groupMemberToUpdate.getMemberHousehold());
+                        groupMembers.get(0).put("memberGender", groupMemberToUpdate.getMemberGender());
                         groupMembers.get(0).put("memberBusiness", groupMemberToUpdate.getMemberBusiness());
                         groupMembers.get(0).put("memberEducationLevel", groupMemberToUpdate.getMemberEducationLevel());
                         groupMembers.get(0).put("memberNationality", groupMemberToUpdate.getMemberNationality());
