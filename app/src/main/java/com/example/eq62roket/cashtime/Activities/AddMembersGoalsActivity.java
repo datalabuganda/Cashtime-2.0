@@ -39,7 +39,7 @@ public class AddMembersGoalsActivity extends AppCompatActivity {
     Button memberGoalCancelBtn, memberGoalSaveBtn;
     private TextView memberName;
     private EditText memberGoalName, memberGoalAmount, memberGoalNote;
-    private String groupMemberLocalUniqueID;
+    private String groupMemberLocalUniqueID, memberGroupLocalUniqueId;
     private ParseGroupHelper mParseGroupHelper;
 
     @Override
@@ -51,6 +51,7 @@ public class AddMembersGoalsActivity extends AppCompatActivity {
 
         Intent addMemberGoalIntent = getIntent();
         groupMemberLocalUniqueID = addMemberGoalIntent.getStringExtra("groupMemberLocalUniqueID");
+        memberGroupLocalUniqueId = addMemberGoalIntent.getStringExtra("memberGroupLocalUniqueId");
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
@@ -127,44 +128,51 @@ public class AddMembersGoalsActivity extends AppCompatActivity {
     private void saveGroupGoal(){
         if ( !memberGoalName.getText().toString().equals("") &&
                 !memberGoalAmount.getText().toString().equals("")){
-            String nameOfGoal = memberGoalName.getText().toString();
-            String costOfGoal = memberGoalAmount.getText().toString();
-            String goalDeadline = memberGoalDueDate.getText().toString();
-            String goalNotes = memberGoalNote.getText().toString();
-            String nameOfMember = memberName.getText().toString();
 
-            String dateToday = new PeriodHelper().getDateToday();
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+            if (Long.parseLong(memberGoalAmount.getText().toString()) < 1000000000) {
+                String nameOfGoal = memberGoalName.getText().toString();
+                String costOfGoal = memberGoalAmount.getText().toString();
+                String goalDeadline = memberGoalDueDate.getText().toString();
+                String goalNotes = memberGoalNote.getText().toString();
+                String nameOfMember = memberName.getText().toString();
 
-            try {
-                Date todayZDate = simpleDateFormat.parse(dateToday);
-                Date goalZDeadline = simpleDateFormat.parse(goalDeadline);
+                String dateToday = new PeriodHelper().getDateToday();
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
 
-                final MembersGoals newMembersGoal = new MembersGoals();
-                newMembersGoal.setMemberGoalAmount(costOfGoal);
-                newMembersGoal.setMemberGoalName(nameOfGoal);
-                newMembersGoal.setMemberGoalDueDate(goalDeadline);
-                newMembersGoal.setMemberName(nameOfMember);
-                newMembersGoal.setMemberLocalUniqueID(groupMemberLocalUniqueID);
-                if (goalNotes.isEmpty()){
-                    newMembersGoal.setMemberGoalNotes("No Notes Added");
-                }else {
-                    newMembersGoal.setMemberGoalNotes(goalNotes);
+                try {
+                    Date todayZDate = simpleDateFormat.parse(dateToday);
+                    Date goalZDeadline = simpleDateFormat.parse(goalDeadline);
+
+                    final MembersGoals newMembersGoal = new MembersGoals();
+                    newMembersGoal.setMemberGoalAmount(costOfGoal);
+                    newMembersGoal.setMemberGoalName(nameOfGoal);
+                    newMembersGoal.setMemberGoalDueDate(goalDeadline);
+                    newMembersGoal.setMemberName(nameOfMember);
+                    newMembersGoal.setMemberLocalUniqueID(groupMemberLocalUniqueID);
+                    newMembersGoal.setMemberGroupLocalUniqueId(memberGroupLocalUniqueId);
+                    newMembersGoal.setGroupStatus("active");
+                    if (goalNotes.isEmpty()){
+                        newMembersGoal.setMemberGoalNotes("No Notes Added");
+                    }else {
+                        newMembersGoal.setMemberGoalNotes(goalNotes);
+                    }
+                    if (todayZDate.after(goalZDeadline)){
+                        newMembersGoal.setMemberGoalStatus("failed");
+                        newMembersGoal.setCompleteDate(dateToday);
+                    }else {
+                        newMembersGoal.setMemberGoalStatus("incomplete");
+                        newMembersGoal.setCompleteDate("");
+                    }
+                    new ParseHelper(this).saveMemberGoalsToParseDb(newMembersGoal);
+
+                    startTabbedGoalsActivity();
+                    Toast.makeText(context, "Member Goal " + newMembersGoal.getMemberGoalName() + " saved", Toast.LENGTH_SHORT).show();
+
+                } catch (ParseException e) {
+                    e.printStackTrace();
                 }
-                if (todayZDate.after(goalZDeadline)){
-                    newMembersGoal.setMemberGoalStatus("failed");
-                    newMembersGoal.setCompleteDate(dateToday);
-                }else {
-                    newMembersGoal.setMemberGoalStatus("incomplete");
-                    newMembersGoal.setCompleteDate("");
-                }
-                new ParseHelper(this).saveMemberGoalsToParseDb(newMembersGoal);
-
-                startTabbedGoalsActivity();
-                Toast.makeText(context, "Member Goal " + newMembersGoal.getMemberGoalName() + " saved", Toast.LENGTH_SHORT).show();
-
-            } catch (ParseException e) {
-                e.printStackTrace();
+            } else {
+                memberGoalAmount.setError("Goal amount can not be greater than 1,000,000,000");
             }
         }else {
             Toast.makeText(context, "All fields are required", Toast.LENGTH_SHORT).show();

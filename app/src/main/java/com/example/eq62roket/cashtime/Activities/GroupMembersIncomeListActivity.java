@@ -49,9 +49,8 @@ public class GroupMembersIncomeListActivity extends AppCompatActivity {
                             Intent editUserIntent = new Intent(GroupMembersIncomeListActivity.this, AddGroupMembersIncomeActivity.class);
                             editUserIntent.putExtra("userName", groupMember.getMemberUsername());
                             editUserIntent.putExtra("groupMemberLocalUniqueID", groupMember.getLocalUniqueID());
-
+                            editUserIntent.putExtra("memberGroupLocalUniqueId", groupMember.getMemberGroupLocalUniqueId());
                             startActivity(editUserIntent);
-                            finish();
                         }
 
                     });

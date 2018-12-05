@@ -12,10 +12,27 @@ public class GroupMember extends ParseObject {
     private String memberUsername, memberPhoneNumber, memberHousehold,
             memberBusiness, memberGender, memberEducationLevel, groupName,
             memberNationality, memberLocation, memberGroupLocalUniqueId,
-            localUniqueID;
+            localUniqueID, groupStatus;
     private long memberPoints;
+    private boolean isLeader;
 
     public GroupMember() {
+    }
+
+    public String getGroupStatus() {
+        return groupStatus;
+    }
+
+    public void setGroupStatus(String groupStatus) {
+        this.groupStatus = groupStatus;
+    }
+
+    public boolean isLeader() {
+        return isLeader;
+    }
+
+    public void setIsLeader(boolean leader) {
+        isLeader = leader;
     }
 
     public String getMemberGroupLocalUniqueId() {

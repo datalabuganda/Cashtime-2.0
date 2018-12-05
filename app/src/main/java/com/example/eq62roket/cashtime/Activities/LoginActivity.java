@@ -1,19 +1,30 @@
 package com.example.eq62roket.cashtime.Activities;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.eq62roket.cashtime.Helper.InternetConnectionStatusHelper;
 import com.example.eq62roket.cashtime.Helper.ParseRegistrationHelper;
+import com.example.eq62roket.cashtime.Helper.ParseUserHelper;
 import com.example.eq62roket.cashtime.Helper.ProgressDialogHelper;
 import com.example.eq62roket.cashtime.Interfaces.OnSuccessfulLoginListener;
 import com.example.eq62roket.cashtime.Models.User;
 import com.example.eq62roket.cashtime.R;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -24,7 +35,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView register;
     CardView login;
 
-//    private ProgressDialog mProgressDialog;
     private ProgressDialogHelper mProgressDialogHelper;
 
     @Override
@@ -42,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         register = (TextView)findViewById(R.id.registerUser);
         login = (CardView)findViewById(R.id.loginUser);
 
+
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,11 +67,13 @@ public class LoginActivity extends AppCompatActivity {
                     registeredUser.setUserName(username);
                     registeredUser.setPassword(password);
 
-                    new ParseRegistrationHelper(LoginActivity.this).loginUserToParseDb(registeredUser, new OnSuccessfulLoginListener() {
+                    new ParseRegistrationHelper(LoginActivity.this)
+                            .loginUserToParseDb(registeredUser, new OnSuccessfulLoginListener() {
                         @Override
                         public void onResponse(String success) {
                             mProgressDialogHelper.dismissProgressDialog();
-                            Intent loginIntent = new Intent(LoginActivity.this, HomeActivity.class);
+                            Intent loginIntent = new Intent(
+                                    LoginActivity.this, HomeActivity.class);
                             startActivity(loginIntent);
                             finish();
                             Toast.makeText(LoginActivity.this, "Logged In Successfully", Toast.LENGTH_SHORT).show();
@@ -70,12 +83,20 @@ public class LoginActivity extends AppCompatActivity {
                         @Override
                         public void onFailure(String error) {
                             mProgressDialogHelper.dismissProgressDialog();
-                            Toast.makeText(LoginActivity.this, "Failed to login " + error, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(
+                                    LoginActivity.this,
+                                    "Failed to login " + error,
+                                    Toast.LENGTH_SHORT
+                            ).show();
                         }
                     });
 
                 } else {
-                    Toast.makeText(LoginActivity.this, "All fields must be filled to login", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(
+                            LoginActivity.this,
+                            "All fields must be filled to login",
+                            Toast.LENGTH_SHORT
+                    ).show();
                 }
             }
         });
@@ -83,10 +104,13 @@ public class LoginActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(LoginActivity.this, RegistrationActivity.class);
+                Intent intent = new Intent(
+                        LoginActivity.this, RegistrationActivity.class);
                 startActivity(intent);
 
             }
         });
+
     }
+
 }

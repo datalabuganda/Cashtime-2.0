@@ -66,7 +66,7 @@ public class GroupGoalsFragment extends Fragment implements SearchView.OnQueryTe
             }
         });
 
-        new ParseHelper(getActivity()).getGroupGoalsFromParseDb(new ParseHelper.OnReturnedGroupGoalsListener() {
+        new ParseHelper(getActivity()).getActiveGroupGoalsFromParseDb(new ParseHelper.OnReturnedGroupGoalsListener() {
             @Override
             public void onResponse(List<GroupGoals> groupGoalsList) {
                 if (groupGoalsList.isEmpty()){

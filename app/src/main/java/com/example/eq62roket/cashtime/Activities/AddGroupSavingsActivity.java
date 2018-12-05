@@ -154,104 +154,109 @@ public class AddGroupSavingsActivity extends AppCompatActivity {
                 selectedPeriod != null &&
                 selectedIncomeSource != null){
 
-            final GroupGoals groupGoal = new GroupGoals();
-            groupGoal.setGroupLocalUniqueID(groupLocalUniqueID);
-            groupGoal.setLocalUniqueID(groupGoalLocalUniqueID);
-            groupGoal.setAmount(groupGoalAmount);
-            groupGoal.setDueDate(groupGoalDueDate);
-            mParseHelper.getTotalGroupSavingsFromParseDb(groupGoal, new OnReturnedGroupSavingsSumListener() {
-                @Override
-                public void onResponse(int groupGoalTotalSavings) {
-                    String amountSaved = savingAmount.getText().toString();
-                    String note = savingNote.getText().toString();
+            if (Long.parseLong(savingAmount.getText().toString()) < 1000000000) {
+                final GroupGoals groupGoal = new GroupGoals();
+                groupGoal.setGroupLocalUniqueID(groupLocalUniqueID);
+                groupGoal.setLocalUniqueID(groupGoalLocalUniqueID);
+                groupGoal.setAmount(groupGoalAmount);
+                groupGoal.setDueDate(groupGoalDueDate);
+                mParseHelper.getTotalGroupSavingsFromParseDb(groupGoal, new OnReturnedGroupSavingsSumListener() {
+                    @Override
+                    public void onResponse(int groupGoalTotalSavings) {
+                        String amountSaved = savingAmount.getText().toString();
+                        String note = savingNote.getText().toString();
 
-                    new ParseIncomeHelper(AddGroupSavingsActivity.this).getTotalGroupIncomeFromParseDb(groupLocalUniqueID);
+                        new ParseIncomeHelper(AddGroupSavingsActivity.this).getTotalGroupIncomeFromParseDb(groupLocalUniqueID);
 
-                    int groupGoalTotalCost = Integer.parseInt(groupGoal.getAmount());
-                    int amountToSave = Integer.valueOf(amountSaved);
-                    int amountRemaining = groupGoalTotalCost - (groupGoalTotalSavings + amountToSave);
+                        int groupGoalTotalCost = Integer.parseInt(groupGoal.getAmount());
+                        int amountToSave = Integer.valueOf(amountSaved);
+                        int amountRemaining = groupGoalTotalCost - (groupGoalTotalSavings + amountToSave);
 
-                    // TODO: 4/5/18 ====> toast calculation buggy... ie test 60000 and 100000...10000 
-                    if ( amountToSave > amountRemaining && amountRemaining != 0 ){
-                        int userRemainingAmount = 0;
-                        if (amountRemaining < 0){
-                            userRemainingAmount = groupGoalTotalCost - groupGoalTotalSavings;
+                        // TODO: 4/5/18 ====> toast calculation buggy... ie test 60000 and 100000...10000
+                        if ( amountToSave > amountRemaining && amountRemaining != 0 ){
+                            int userRemainingAmount = 0;
+                            if (amountRemaining < 0){
+                                userRemainingAmount = groupGoalTotalCost - groupGoalTotalSavings;
+                            }else {
+                                userRemainingAmount = amountRemaining;
+                            }
+                            Toast.makeText(
+                                    AddGroupSavingsActivity.this,
+                                    "You can not save " + amountToSave + ", you need " + userRemainingAmount + " to complete your goal",
+                                    Toast.LENGTH_LONG).show();
                         }else {
-                            userRemainingAmount = amountRemaining;
-                        }
-                        Toast.makeText(
-                                AddGroupSavingsActivity.this,
-                                "You can not save " + amountToSave + ", you need " + userRemainingAmount + " to complete your goal",
-                                Toast.LENGTH_LONG).show();
-                    }else {
 
-                        Date today = new Date();
-                        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-                        String dateToday = simpleDateFormat.format(today);
-                        try {
-                            Date groupGoalDueDate = simpleDateFormat.parse(groupGoal.getDueDate());
-                            Date todayZdate = simpleDateFormat.parse(dateToday);
-                            GroupGoals completedGroupGoal = new GroupGoals();
-                            completedGroupGoal.setLocalUniqueID(groupGoalLocalUniqueID);
-                            completedGroupGoal.setGroupLocalUniqueID(groupLocalUniqueID);
+                            Date today = new Date();
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                            String dateToday = simpleDateFormat.format(today);
+                            try {
+                                Date groupGoalDueDate = simpleDateFormat.parse(groupGoal.getDueDate());
+                                Date todayZdate = simpleDateFormat.parse(dateToday);
+                                GroupGoals completedGroupGoal = new GroupGoals();
+                                completedGroupGoal.setLocalUniqueID(groupGoalLocalUniqueID);
+                                completedGroupGoal.setGroupLocalUniqueID(groupLocalUniqueID);
 
-                            if ( amountRemaining == 0 && todayZdate.before(groupGoalDueDate) ){
-                                completedGroupGoal.setGroupGoalStatus("completed");
-                                completedGroupGoal.setCompletedDate(dateToday);
-                                mParseHelper.updateGroupGoalCompleteStatusInParseDb(completedGroupGoal);
-                            }else if (amountRemaining == 0 && todayZdate.equals(groupGoalDueDate)){
-                                completedGroupGoal.setGroupGoalStatus("completed");
-                                completedGroupGoal.setCompletedDate(dateToday);
-                                mParseHelper.updateGroupGoalCompleteStatusInParseDb(completedGroupGoal);
-                            }else if (amountRemaining != 0 && todayZdate.after(groupGoalDueDate)){
-                                completedGroupGoal.setGroupGoalStatus("failed");
-                                completedGroupGoal.setCompletedDate(dateToday);
-                                mParseHelper.updateGroupGoalCompleteStatusInParseDb(completedGroupGoal);
-                            }else {
-                                completedGroupGoal.setGroupGoalStatus("incomplete");
-                                completedGroupGoal.setCompletedDate("");
-                                mParseHelper.updateGroupGoalCompleteStatusInParseDb(completedGroupGoal);
+                                if ( amountRemaining == 0 && todayZdate.before(groupGoalDueDate) ){
+                                    completedGroupGoal.setGroupGoalStatus("completed");
+                                    completedGroupGoal.setCompletedDate(dateToday);
+                                    mParseHelper.updateGroupGoalCompleteStatusInParseDb(completedGroupGoal);
+                                }else if (amountRemaining == 0 && todayZdate.equals(groupGoalDueDate)){
+                                    completedGroupGoal.setGroupGoalStatus("completed");
+                                    completedGroupGoal.setCompletedDate(dateToday);
+                                    mParseHelper.updateGroupGoalCompleteStatusInParseDb(completedGroupGoal);
+                                }else if (amountRemaining != 0 && todayZdate.after(groupGoalDueDate)){
+                                    completedGroupGoal.setGroupGoalStatus("failed");
+                                    completedGroupGoal.setCompletedDate(dateToday);
+                                    mParseHelper.updateGroupGoalCompleteStatusInParseDb(completedGroupGoal);
+                                }else {
+                                    completedGroupGoal.setGroupGoalStatus("incomplete");
+                                    completedGroupGoal.setCompletedDate("");
+                                    mParseHelper.updateGroupGoalCompleteStatusInParseDb(completedGroupGoal);
+                                }
+                            } catch (ParseException e) {
+                                e.printStackTrace();
                             }
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
 
-                        if (selectedPeriod.equals("Daily")){
-                            savingPeriod[0] = new PeriodHelper().getDailyDate();
-                        }else if (selectedPeriod.equals("Weekly")){
-                            savingPeriod[0] = new PeriodHelper().getWeeklyDate();
-                        }else if (selectedPeriod.equals("Monthly")){
-                            savingPeriod[0] = new PeriodHelper().getMonthlyDate();
-                        }
-                        if (!selectedPeriod.equals("")){
-                            GroupSavings newGroupSaving = new GroupSavings();
-                            newGroupSaving.setAmount(amountSaved);
-                            newGroupSaving.setGoalName(nameOfGoal);
-                            newGroupSaving.setIncomeSource(selectedIncomeSource);
-                            newGroupSaving.setPeriod(selectedPeriod);
-                            newGroupSaving.setDateAdded(dateToday);
-                            newGroupSaving.setGroupLocalUniqueID(groupLocalUniqueID);
-                            newGroupSaving.setGroupGoalLocalUniqueID(groupGoalLocalUniqueID);
-                            if (note.trim().equals("")){
-                                newGroupSaving.setNotes("No notes");
-                            }else {
-                                newGroupSaving.setNotes(note);
+                            if (selectedPeriod.equals("Daily")){
+                                savingPeriod[0] = new PeriodHelper().getDailyDate();
+                            }else if (selectedPeriod.equals("Weekly")){
+                                savingPeriod[0] = new PeriodHelper().getWeeklyDate();
+                            }else if (selectedPeriod.equals("Monthly")){
+                                savingPeriod[0] = new PeriodHelper().getMonthlyDate();
                             }
-                            mParseHelper.saveGroupSavingsToParseDb(newGroupSaving);
-                            // TODO: 3/29/18 ====> award the user 3 points
-                            startTabbedSavingActivity();
-                            Toast.makeText(AddGroupSavingsActivity.this, "Saving recorded", Toast.LENGTH_SHORT).show();
+                            if (!selectedPeriod.equals("")){
+                                GroupSavings newGroupSaving = new GroupSavings();
+                                newGroupSaving.setAmount(amountSaved);
+                                newGroupSaving.setGoalName(nameOfGoal);
+                                newGroupSaving.setIncomeSource(selectedIncomeSource);
+                                newGroupSaving.setPeriod(selectedPeriod);
+                                newGroupSaving.setDateAdded(dateToday);
+                                newGroupSaving.setGroupLocalUniqueID(groupLocalUniqueID);
+                                newGroupSaving.setGroupGoalLocalUniqueID(groupGoalLocalUniqueID);
+                                newGroupSaving.setGroupStatus("active");
+                                if (note.trim().equals("")){
+                                    newGroupSaving.setNotes("No notes");
+                                }else {
+                                    newGroupSaving.setNotes(note);
+                                }
+                                mParseHelper.saveGroupSavingsToParseDb(newGroupSaving);
+                                // TODO: 3/29/18 ====> award the user 3 points
+                                startTabbedSavingActivity();
+                                Toast.makeText(AddGroupSavingsActivity.this, "Saving recorded", Toast.LENGTH_SHORT).show();
 
+                            }
                         }
+
                     }
 
-                }
+                    @Override
+                    public void onFailure(String error) {
 
-                @Override
-                public void onFailure(String error) {
-
-                }
-            });
+                    }
+                });
+            } else {
+                savingAmount.setError("Saving amount can not be greater than 1,000,000,000");
+            }
 
         } else {
             Toast.makeText(this, "All fields are required.", Toast.LENGTH_SHORT).show();
